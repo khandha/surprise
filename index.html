@@ -1715,7 +1715,18 @@
     }
 
     .ticket-shell .claim-button::before {
-      display: none;
+      top: -55%;
+      bottom: -55%;
+      left: -34%;
+      width: 24%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 224, 154, 0.26),
+        rgba(255, 244, 205, 0.5),
+        transparent
+      );
+      animation: shine 3.6s 0.9s ease-in-out infinite;
     }
 
     .ticket-shell .claim-button:active {
