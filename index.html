@@ -1,0 +1,2148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c0b0a">
+  <meta name="color-scheme" content="light dark">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="你的终极奖励">
+  <meta name="description" content="恭喜你获得烤匠双人餐一份，仅限跟我吃。">
+  <title>你的终极奖励</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230c0b0a'/%3E%3Cpath d='M13 29 15 12l13 9c2-1 6-1 8 0l13-9 2 17c2 14-8 24-19 24S11 43 13 29Z' fill='%23e8b957'/%3E%3Cpath d='M24 34c3 3 5 3 8 0 3 3 5 3 8 0' fill='none' stroke='%230c0b0a' stroke-width='2.4'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0c0b0a;
+      --black-soft: #171411;
+      --ink: #332a25;
+      --ink-soft: #796b62;
+      --cream: #fff8ef;
+      --paper: #fffdf8;
+      --gold: #e8b957;
+      --gold-soft: #f4d895;
+      --coral: #e96f61;
+      --coral-deep: #ca554b;
+      --mint: #73a68e;
+      --line: rgba(76, 57, 46, 0.12);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --ease-out: cubic-bezier(0.22, 0.78, 0.18, 1);
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--black);
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      color: var(--ink);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible {
+      outline: 3px solid rgba(232, 185, 87, 0.62);
+      outline-offset: 4px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .experience {
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      overflow-x: hidden;
+      overflow-y: auto;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(1.012);
+      transition:
+        opacity 0.46s var(--ease-out),
+        transform 0.6s var(--ease-out),
+        visibility 0.46s;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scene.is-active {
+      z-index: 2;
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    .scene.is-leaving {
+      z-index: 1;
+      visibility: visible;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.988);
+    }
+
+    .scene--dark {
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 50% 29%, rgba(232, 185, 87, 0.14), transparent 23rem),
+        radial-gradient(circle at 100% 100%, rgba(202, 85, 75, 0.18), transparent 25rem),
+        var(--black);
+    }
+
+    .scene--light {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(255, 198, 158, 0.66), transparent 25rem),
+        radial-gradient(circle at 95% 20%, rgba(169, 205, 187, 0.48), transparent 24rem),
+        radial-gradient(circle at 50% 92%, rgba(244, 216, 149, 0.2), transparent 25rem),
+        var(--cream);
+    }
+
+    .scene--light::before,
+    .scene--dark::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+    }
+
+    .scene--light::before {
+      opacity: 0.23;
+      background-image: radial-gradient(rgba(93, 70, 57, 0.3) 0.5px, transparent 0.5px);
+      background-size: 15px 15px;
+      mask-image: linear-gradient(to bottom, black, transparent 62%);
+      -webkit-mask-image: linear-gradient(to bottom, black, transparent 62%);
+    }
+
+    .scene--dark::before {
+      opacity: 0.16;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(circle at center, black, transparent 75%);
+      -webkit-mask-image: radial-gradient(circle at center, black, transparent 75%);
+    }
+
+    .shell {
+      position: relative;
+      display: flex;
+      width: min(100%, 440px);
+      min-height: 100%;
+      margin: 0 auto;
+      padding: calc(var(--safe-top) + 17px) 18px calc(var(--safe-bottom) + 24px);
+      flex-direction: column;
+    }
+
+    .loading-scene {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading {
+      width: min(78vw, 292px);
+      margin-top: -5svh;
+      text-align: center;
+    }
+
+    .loading__eyebrow {
+      margin: 0 0 15px;
+      color: rgba(255, 253, 248, 0.5);
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: 0.24em;
+    }
+
+    .cat-medallion {
+      position: relative;
+      display: grid;
+      width: 122px;
+      height: 122px;
+      margin: 0 auto 27px;
+      place-items: center;
+      border: 1px solid rgba(232, 185, 87, 0.24);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(232, 185, 87, 0.15), transparent 66%),
+        rgba(255, 255, 255, 0.02);
+      box-shadow:
+        0 0 0 10px rgba(232, 185, 87, 0.025),
+        0 0 50px rgba(232, 185, 87, 0.11);
+    }
+
+    .cat-medallion::before,
+    .cat-medallion::after {
+      position: absolute;
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .cat-medallion::before {
+      inset: 8px;
+      border: 1px dashed rgba(232, 185, 87, 0.22);
+      animation: spin-ring 18s linear infinite;
+    }
+
+    .cat-medallion::after {
+      inset: 0;
+      border: 1px solid transparent;
+      border-top-color: var(--gold);
+      opacity: 0.48;
+      animation: spin-ring 3.8s linear infinite;
+    }
+
+    .cat-medallion img {
+      width: 70px;
+      height: auto;
+      filter: drop-shadow(0 10px 13px rgba(0, 0, 0, 0.56));
+      animation: cat-float 2.5s ease-in-out infinite;
+      transform-origin: 50% 82%;
+    }
+
+    .loading__title {
+      margin: 0;
+      color: #fffaf1;
+      font-size: 19px;
+      font-weight: 760;
+      letter-spacing: 0.01em;
+    }
+
+    .loading__dots::after {
+      display: inline-block;
+      width: 1.4em;
+      overflow: hidden;
+      vertical-align: bottom;
+      content: "...";
+      animation: dots 1.15s steps(4, end) infinite;
+    }
+
+    .loading__track {
+      position: relative;
+      height: 3px;
+      margin-top: 25px;
+      overflow: hidden;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .loading__bar {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #b98a31, var(--gold), #ffe4a4);
+      box-shadow: 0 0 13px rgba(232, 185, 87, 0.4);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+
+    .loading__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      color: rgba(255, 250, 241, 0.42);
+      font-size: 9px;
+      font-weight: 650;
+      letter-spacing: 0.14em;
+    }
+
+    .loading__percent {
+      color: var(--gold-soft);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .topline {
+      display: flex;
+      min-height: 34px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .topline--back {
+      justify-content: space-between;
+    }
+
+    .back-nav {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      gap: 7px;
+      margin: -5px 0;
+      padding: 0 4px 0 0;
+      border: 0;
+      color: rgba(255, 250, 241, 0.52);
+      background: transparent;
+      font-size: 10px;
+      font-weight: 680;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .scene--light .back-nav {
+      color: rgba(76, 57, 46, 0.58);
+    }
+
+    .back-nav__icon {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 50%;
+      color: rgba(255, 250, 241, 0.8);
+      background: rgba(255, 255, 255, 0.045);
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .scene--light .back-nav__icon {
+      border-color: rgba(76, 57, 46, 0.1);
+      color: var(--ink);
+      background: rgba(255, 253, 248, 0.55);
+    }
+
+    .back-nav:active .back-nav__icon {
+      transform: scale(0.94);
+    }
+
+    .brandline {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 9px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+    }
+
+    .brandline__cat {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(232, 185, 87, 0.25);
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .brandline__cat img {
+      width: 20px;
+      height: auto;
+      margin-top: 4px;
+    }
+
+    .scene--light .brandline__cat {
+      border-color: rgba(76, 57, 46, 0.08);
+      box-shadow: 0 7px 16px rgba(88, 62, 48, 0.12);
+    }
+
+    .step {
+      color: rgba(255, 250, 241, 0.42);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      white-space: nowrap;
+    }
+
+    .scene--light .step {
+      color: #aa9388;
+    }
+
+    .story-shell {
+      justify-content: space-between;
+      background: #000;
+    }
+
+    .story-shell::before {
+      display: none;
+    }
+
+    .story {
+      position: relative;
+      display: flex;
+      flex: 1;
+      min-height: 470px;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 0 36px;
+      text-align: center;
+    }
+
+    .story__content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .story__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 24px;
+      color: var(--gold-soft);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      opacity: 0;
+    }
+
+    .story__label::before,
+    .story__label::after {
+      width: 24px;
+      height: 1px;
+      background: currentColor;
+      content: "";
+      opacity: 0.42;
+    }
+
+    .story h1 {
+      margin: 0 auto;
+      color: #fffaf1;
+      font-size: clamp(34px, 10vw, 45px);
+      font-weight: 850;
+      line-height: 1.3;
+      letter-spacing: -0.06em;
+    }
+
+    .story__line {
+      display: block;
+      opacity: 0;
+      filter: blur(6px);
+    }
+
+    .story__final {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 1.3em;
+    }
+
+    .story__final .story__line {
+      color: var(--gold-soft);
+      filter: blur(7px);
+      opacity: 0;
+      transform: translateY(13px);
+      white-space: nowrap;
+      animation: none;
+    }
+
+    .story-shell.is-active .story__label {
+      animation: story-line-in 1.25s 0.16s var(--ease-out) forwards;
+    }
+
+    .story-shell.is-active .story__line--opening {
+      animation: story-line-in 1.4s 0.34s var(--ease-out) forwards;
+    }
+
+    .story-shell.is-active .story__line--middle {
+      animation: story-line-in 1.4s 1.3s var(--ease-out) forwards;
+    }
+
+    .story-shell.is-active .story__final .story__line {
+      animation: story-line-in 1.5s 2.25s var(--ease-out) forwards;
+    }
+
+    .story__cat-aura {
+      position: relative;
+      display: grid;
+      width: 94px;
+      height: 94px;
+      flex: 0 0 94px;
+      place-items: center;
+      border: 1px solid rgba(232, 185, 87, 0.28);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 185, 87, 0.2), rgba(232, 185, 87, 0.02) 68%);
+      box-shadow: 0 0 38px rgba(232, 185, 87, 0.1);
+      opacity: 0;
+      filter: blur(7px);
+      transform: translateY(13px);
+    }
+
+    .story-shell.is-active .story__cat-aura {
+      animation: story-line-in 1.6s 3.4s var(--ease-out) forwards;
+    }
+
+    .story__cat-aura::before {
+      position: absolute;
+      inset: 7px;
+      border: 1px dashed rgba(232, 185, 87, 0.2);
+      border-radius: 50%;
+      content: "";
+      animation: spin-ring 15s linear infinite;
+    }
+
+    .story__cat-aura img {
+      position: relative;
+      z-index: 1;
+      width: 60px;
+      height: auto;
+      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.65));
+      animation: cat-float 2.7s 3.3s ease-in-out infinite;
+    }
+
+    .bottom-area {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      opacity: 0;
+    }
+
+    .story-shell.is-active .bottom-area {
+      animation: soft-in 0.9s 3.4s both;
+    }
+
+    .prize-shell.is-active .bottom-area {
+      animation: soft-in 0.7s 0.5s both;
+    }
+
+    .continue-button {
+      display: flex;
+      width: 100%;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      color: #fffaf1;
+      background: rgba(255, 255, 255, 0.045);
+      font-size: 14px;
+      font-weight: 710;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .continue-button:active {
+      background: rgba(255, 255, 255, 0.09);
+      transform: scale(0.985);
+    }
+
+    .continue-button__icon {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--black);
+      background: var(--gold-soft);
+      font-size: 14px;
+      animation: nudge 1.7s ease-in-out infinite;
+    }
+
+    .microcopy {
+      margin: 12px 0 0;
+      color: rgba(255, 250, 241, 0.33);
+      font-size: 9px;
+      text-align: center;
+      letter-spacing: 0.12em;
+    }
+
+    .prize-shell {
+      justify-content: space-between;
+    }
+
+    .prize-stage {
+      position: relative;
+      display: flex;
+      flex: 1;
+      min-height: 520px;
+      align-items: center;
+      justify-content: center;
+      padding: 38px 0 30px;
+      text-align: center;
+    }
+
+    .prize-stage__ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(94vw, 420px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(232, 185, 87, 0.14);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(232, 185, 87, 0.13), transparent 51%),
+        repeating-radial-gradient(circle, transparent 0 17px, rgba(232, 185, 87, 0.06) 18px 19px);
+      transform: translate(-50%, -50%);
+      animation: ring-breathe 3.7s ease-in-out infinite;
+    }
+
+    .prize-stage__cat {
+      position: absolute;
+      top: 6%;
+      right: 13%;
+      width: 106px;
+      height: auto;
+      filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.4));
+      transform: rotate(8deg);
+      animation: cat-peek 3.2s ease-in-out infinite;
+    }
+
+    .prize-reveal {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      animation: prize-pop 0.9s var(--ease-out) both;
+    }
+
+    .prize-reveal__kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 16px;
+      color: var(--gold-soft);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+    }
+
+    .prize-reveal__kicker::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      content: "";
+      box-shadow: 0 0 0 6px rgba(232, 185, 87, 0.1);
+    }
+
+    .prize-reveal h2 {
+      margin: 0;
+      color: rgba(255, 250, 241, 0.66);
+      font-size: 17px;
+      font-weight: 580;
+      letter-spacing: 0.04em;
+    }
+
+    .prize-reveal__name {
+      margin: 9px 0 0;
+      color: #fffaf1;
+      font-size: clamp(45px, 13.2vw, 58px);
+      font-weight: 880;
+      line-height: 1.03;
+      letter-spacing: -0.07em;
+      text-shadow: 0 8px 32px rgba(232, 185, 87, 0.1);
+    }
+
+    .prize-reveal__name em {
+      display: inline-block;
+      margin-top: 7px;
+      color: var(--gold-soft);
+      font-size: 0.72em;
+      font-style: normal;
+      transform: rotate(-2deg);
+    }
+
+    .prize-reveal__condition {
+      display: inline-block;
+      margin: 18px 0 0;
+      padding: 8px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 999px;
+      color: rgba(255, 250, 241, 0.65);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .ticket-shell {
+      justify-content: flex-start;
+    }
+
+    .ticket-heading {
+      padding: 24px 7px 17px;
+      text-align: center;
+      animation: soft-in 0.65s 0.1s both;
+    }
+
+    .ticket-heading__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 9px;
+      color: var(--coral-deep);
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: 0.17em;
+    }
+
+    .ticket-heading__eyebrow::before,
+    .ticket-heading__eyebrow::after {
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      content: "";
+      opacity: 0.34;
+    }
+
+    .ticket-heading h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(32px, 9vw, 41px);
+      font-weight: 860;
+      line-height: 1.15;
+      letter-spacing: -0.06em;
+    }
+
+    .ticket {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(82, 58, 46, 0.1);
+      border-radius: 29px;
+      background: var(--paper);
+      box-shadow:
+        0 26px 64px rgba(87, 58, 43, 0.13),
+        0 4px 14px rgba(87, 58, 43, 0.045);
+      animation: ticket-in 0.8s 0.2s var(--ease-out) both;
+    }
+
+    .ticket::before {
+      position: absolute;
+      top: -72px;
+      left: -58px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255, 222, 203, 0.52);
+      content: "";
+    }
+
+    .ticket::after {
+      position: absolute;
+      top: 75px;
+      right: -63px;
+      width: 148px;
+      height: 148px;
+      border: 1px dashed rgba(233, 111, 97, 0.18);
+      border-radius: 50%;
+      content: "";
+      transform: rotate(12deg);
+    }
+
+    .ticket__top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 18px 20px 0;
+    }
+
+    .success-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid rgba(72, 132, 105, 0.13);
+      border-radius: 99px;
+      color: #477960;
+      background: #e9f4ee;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+    }
+
+    .success-pill span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 4px rgba(115, 166, 142, 0.12);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+
+    .ticket__no {
+      color: #ad8e7f;
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: 0.14em;
+    }
+
+    .ticket__cat-wrap {
+      position: relative;
+      display: grid;
+      height: 142px;
+      place-items: center;
+      margin-top: -2px;
+    }
+
+    .ticket__cat-wrap::before {
+      position: absolute;
+      width: 117px;
+      height: 117px;
+      border: 1px solid rgba(232, 185, 87, 0.32);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(243, 211, 137, 0.23), transparent 66%),
+        #fffaf2;
+      content: "";
+      box-shadow: 0 9px 22px rgba(112, 79, 61, 0.08);
+    }
+
+    .ticket__cat {
+      position: relative;
+      z-index: 1;
+      width: 74px;
+      height: auto;
+      margin-top: 7px;
+      filter: drop-shadow(0 10px 11px rgba(59, 40, 30, 0.18));
+      animation: cat-float 2.7s ease-in-out infinite;
+    }
+
+    .spark {
+      position: absolute;
+      color: var(--gold);
+      font-size: 13px;
+      animation: twinkle 2s ease-in-out infinite;
+    }
+
+    .spark--one {
+      top: 38px;
+      left: 78px;
+    }
+
+    .spark--two {
+      top: 69px;
+      right: 72px;
+      font-size: 10px;
+      animation-delay: -0.8s;
+    }
+
+    .spark--three {
+      bottom: 25px;
+      left: 52px;
+      color: var(--coral);
+      font-size: 8px;
+      animation-delay: -1.2s;
+    }
+
+    .prize-card-copy {
+      position: relative;
+      z-index: 1;
+      padding: 0 22px;
+      text-align: center;
+    }
+
+    .prize-card-copy__label {
+      margin: 0 0 5px;
+      color: var(--coral-deep);
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: 0.19em;
+    }
+
+    .prize-card-copy h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(26px, 7.2vw, 31px);
+      font-weight: 850;
+      line-height: 1.22;
+      letter-spacing: -0.045em;
+    }
+
+    .prize-card-copy h2 em {
+      color: var(--coral-deep);
+      font-style: normal;
+    }
+
+    .prize-card-copy__only {
+      margin: 7px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 620;
+    }
+
+    .ticket__divider {
+      position: relative;
+      height: 26px;
+      margin-top: 11px;
+    }
+
+    .ticket__divider::before {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      left: 20px;
+      border-top: 1px dashed rgba(85, 59, 47, 0.19);
+      content: "";
+    }
+
+    .ticket__divider::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      padding: 0 10px;
+      color: #bd9c8d;
+      background: var(--paper);
+      content: "♡";
+      font-size: 12px;
+      transform: translate(-50%, -52%);
+    }
+
+    .ticket__details {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 0 18px;
+    }
+
+    .validity-card {
+      position: relative;
+      display: flex;
+      min-height: 68px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      overflow: hidden;
+      padding: 11px 48px;
+      border: 1px solid rgba(214, 162, 90, 0.15);
+      border-radius: 17px;
+      background:
+        linear-gradient(135deg, rgba(255, 244, 234, 0.94), rgba(255, 253, 248, 0.98) 52%, rgba(251, 244, 229, 0.92));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 6px 16px rgba(103, 71, 52, 0.045);
+      text-align: center;
+    }
+
+    .validity-card::before {
+      position: absolute;
+      top: 50%;
+      right: 19px;
+      color: rgba(232, 185, 87, 0.2);
+      content: "∞";
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 42px;
+      line-height: 1;
+      transform: translateY(-52%);
+    }
+
+    .validity-card::after {
+      position: absolute;
+      top: 13px;
+      bottom: 13px;
+      left: 19px;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(233, 111, 97, 0.2), transparent);
+      content: "";
+    }
+
+    .validity-card__label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--coral-deep);
+      font-size: 9px;
+      font-weight: 720;
+      letter-spacing: 0.1em;
+    }
+
+    .validity-card__value {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 780;
+      letter-spacing: 0.02em;
+    }
+
+    .ticket__note {
+      position: relative;
+      z-index: 1;
+      margin: 11px 22px 0;
+      color: #876f64;
+      font-size: 11px;
+      line-height: 1.58;
+      text-align: center;
+    }
+
+    .claim-button {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: calc(100% - 38px);
+      min-height: 49px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 13px 19px 20px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 16px;
+      color: #fff;
+      background: var(--coral);
+      box-shadow: 0 12px 23px rgba(202, 85, 75, 0.2);
+      font-size: 14px;
+      font-weight: 760;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+      touch-action: manipulation;
+    }
+
+    .claim-button::before {
+      position: absolute;
+      top: -50%;
+      bottom: -50%;
+      left: -40%;
+      width: 25%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      content: "";
+      transform: skewX(-22deg);
+      animation: shine 4.5s 1s ease-in-out infinite;
+    }
+
+    .claim-button:active {
+      background: var(--coral-deep);
+      transform: scale(0.985);
+    }
+
+    .claim-button__heart {
+      font-size: 17px;
+      animation: heart-beat 1.8s ease-in-out infinite;
+    }
+
+    .ticket-footer {
+      padding: 15px 10px 0;
+      color: rgba(101, 78, 67, 0.52);
+      font-size: 9px;
+      line-height: 1.5;
+      text-align: center;
+      letter-spacing: 0.06em;
+      animation: soft-in 0.7s 0.55s both;
+    }
+
+    .wechat-shell {
+      justify-content: space-between;
+    }
+
+    .wechat-heading {
+      padding: 37px 5px 17px;
+      text-align: center;
+      animation: soft-in 0.7s 0.08s both;
+    }
+
+    .wechat-heading__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 14px;
+      padding: 7px 11px;
+      border: 1px solid rgba(78, 124, 101, 0.14);
+      border-radius: 99px;
+      color: #49775f;
+      background: rgba(235, 246, 240, 0.82);
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: 0.12em;
+    }
+
+    .wechat-heading__badge span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+
+    .wechat-heading h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(34px, 9.8vw, 44px);
+      font-weight: 860;
+      line-height: 1.17;
+      letter-spacing: -0.06em;
+    }
+
+    .wechat-heading p {
+      margin: 10px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .qr-card {
+      position: relative;
+      margin: auto 0;
+      padding: 27px 24px 23px;
+      border: 1px solid rgba(81, 57, 45, 0.1);
+      border-radius: 29px;
+      background: rgba(255, 253, 248, 0.93);
+      box-shadow:
+        0 27px 60px rgba(92, 62, 46, 0.13),
+        0 4px 14px rgba(92, 62, 46, 0.04);
+      text-align: center;
+      animation: card-rise 0.78s 0.17s var(--ease-out) both;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .qr-card__cat {
+      position: absolute;
+      top: -70px;
+      left: 28px;
+      width: 84px;
+      height: auto;
+      filter: drop-shadow(0 11px 13px rgba(73, 48, 36, 0.18));
+      transform: rotate(-7deg);
+      animation: cat-peek 3s ease-in-out infinite;
+    }
+
+    .qr-card__label {
+      margin: 0 0 7px;
+      color: var(--coral-deep);
+      font-size: 9px;
+      font-weight: 760;
+      letter-spacing: 0.18em;
+    }
+
+    .qr-card h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 24px;
+      font-weight: 830;
+      letter-spacing: -0.04em;
+    }
+
+    .qr-card__desc {
+      margin: 8px 0 17px;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .qr-frame {
+      position: relative;
+      width: fit-content;
+      margin: 0 auto;
+      padding: 9px;
+      border: 1px solid rgba(83, 58, 46, 0.11);
+      border-radius: 19px;
+      background: #fff;
+      box-shadow:
+        0 12px 27px rgba(85, 58, 43, 0.1),
+        0 0 0 7px rgba(244, 216, 149, 0.14);
+    }
+
+    .qr-frame::before,
+    .qr-frame::after {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--coral);
+      content: "";
+      opacity: 0.55;
+    }
+
+    .qr-frame::before {
+      top: -6px;
+      left: -6px;
+      border-top: 2px solid;
+      border-left: 2px solid;
+      border-radius: 8px 0 0;
+    }
+
+    .qr-frame::after {
+      right: -6px;
+      bottom: -6px;
+      border-right: 2px solid;
+      border-bottom: 2px solid;
+      border-radius: 0 0 8px;
+    }
+
+    .qr-frame img {
+      display: block;
+      width: min(46vw, 176px);
+      height: auto;
+      aspect-ratio: 1;
+      border-radius: 11px;
+      object-fit: contain;
+      image-rendering: crisp-edges;
+    }
+
+    .qr-card__hint {
+      margin: 15px 0 0;
+      color: #8f786e;
+      font-size: 10px;
+    }
+
+    .qr-card__hint strong {
+      color: var(--coral-deep);
+      font-weight: 720;
+    }
+
+    .wechat-bottom {
+      display: grid;
+      gap: 11px;
+      padding-top: 17px;
+      animation: soft-in 0.65s 0.5s both;
+    }
+
+    .back-button {
+      min-height: 45px;
+      border: 1px solid rgba(74, 54, 43, 0.12);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: rgba(255, 253, 248, 0.52);
+      font-size: 12px;
+      font-weight: 660;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .back-button:active {
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .wechat-bottom p {
+      margin: 0;
+      color: rgba(95, 71, 59, 0.5);
+      font-size: 9px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 12px;
+      border-radius: 2px;
+      will-change: transform, opacity;
+    }
+
+    .confetti-piece[data-shape="circle"] {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .confetti-piece[data-shape="heart"] {
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      background: transparent !important;
+      color: var(--coral);
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    @keyframes spin-ring {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes cat-float {
+      0%,
+      100% {
+        transform: translateY(0) rotate(-1deg);
+      }
+      50% {
+        transform: translateY(-5px) rotate(1deg);
+      }
+    }
+
+    @keyframes cat-peek {
+      0%,
+      100% {
+        transform: translateY(0) rotate(-7deg);
+      }
+      50% {
+        transform: translateY(-4px) rotate(-4deg);
+      }
+    }
+
+    @keyframes dots {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 1.4em;
+      }
+    }
+
+    @keyframes nudge {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(2px);
+      }
+    }
+
+    @keyframes soft-in {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes story-line-in {
+      from {
+        opacity: 0;
+        filter: blur(7px);
+        transform: translateY(13px);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes prize-pop {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.92);
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes ring-breathe {
+      0%,
+      100% {
+        opacity: 0.65;
+        transform: translate(-50%, -50%) scale(0.96);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.03);
+      }
+    }
+
+    @keyframes ticket-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px) rotate(-0.7deg) scale(0.975);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) rotate(0) scale(1);
+      }
+    }
+
+    @keyframes card-rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes twinkle {
+      0%,
+      100% {
+        opacity: 0.28;
+        transform: scale(0.8) rotate(0);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.12) rotate(18deg);
+      }
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        box-shadow: 0 0 0 4px rgba(115, 166, 142, 0.12);
+      }
+      50% {
+        box-shadow: 0 0 0 7px rgba(115, 166, 142, 0.03);
+      }
+    }
+
+    @keyframes shine {
+      0%,
+      56% {
+        left: -40%;
+      }
+      74%,
+      100% {
+        left: 118%;
+      }
+    }
+
+    @keyframes heart-beat {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.32);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .shell {
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .story {
+        min-height: 420px;
+      }
+
+      .story h1 {
+        font-size: 31px;
+      }
+
+      .story__final {
+        gap: 5px;
+      }
+
+      .story__cat-aura {
+        width: 76px;
+        height: 76px;
+        flex-basis: 76px;
+      }
+
+      .story__cat-aura img {
+        width: 48px;
+      }
+
+      .prize-stage {
+        min-height: 470px;
+      }
+
+      .prize-stage__cat {
+        top: 3%;
+        right: 8%;
+        width: 88px;
+      }
+
+      .ticket-heading {
+        padding-top: 18px;
+      }
+
+      .ticket__cat-wrap {
+        height: 126px;
+      }
+
+      .ticket__cat {
+        width: 66px;
+      }
+
+      .ticket__cat-wrap::before {
+        width: 103px;
+        height: 103px;
+      }
+
+      .ticket__details {
+        padding: 0 15px;
+        gap: 7px;
+      }
+
+      .claim-button {
+        width: calc(100% - 30px);
+        margin-right: 15px;
+        margin-left: 15px;
+      }
+
+      .qr-card {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      .qr-frame img {
+        width: 142px;
+      }
+
+      .qr-card__cat {
+        width: 72px;
+      }
+    }
+
+    @media (max-height: 690px) {
+      .story-shell,
+      .prize-shell {
+        min-height: 100%;
+      }
+
+      .story {
+        min-height: 380px;
+        padding-top: 20px;
+      }
+
+      .prize-stage {
+        min-height: 390px;
+      }
+
+      .prize-stage__cat {
+        width: 80px;
+      }
+
+      .ticket-heading {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .ticket__cat-wrap {
+        height: 106px;
+      }
+
+      .ticket__cat {
+        width: 59px;
+      }
+
+      .ticket__cat-wrap::before {
+        width: 88px;
+        height: 88px;
+      }
+
+      .ticket__note {
+        margin-top: 7px;
+      }
+
+      .claim-button {
+        min-height: 46px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+      }
+
+      .wechat-heading {
+        padding-top: 17px;
+        padding-bottom: 8px;
+      }
+
+      .qr-card {
+        padding-top: 19px;
+        padding-bottom: 16px;
+      }
+
+      .qr-frame img {
+        width: 142px;
+      }
+
+      .qr-card__desc {
+        margin-bottom: 11px;
+      }
+    }
+
+    @media (min-width: 700px) and (min-height: 700px) {
+      .shell {
+        padding-top: 27px;
+        padding-bottom: 31px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    /* Unified black-gold direction for the final voucher and QR pages. */
+    .ticket-shell,
+    .wechat-shell {
+      background:
+        radial-gradient(circle at 50% 12%, rgba(232, 185, 87, 0.09), transparent 22rem),
+        radial-gradient(circle at 92% 78%, rgba(201, 87, 72, 0.08), transparent 22rem),
+        #0c0b0a;
+    }
+
+    .ticket-shell .step,
+    .wechat-shell .step {
+      color: rgba(244, 216, 149, 0.54);
+    }
+
+    .ticket-shell .ticket-heading {
+      padding-top: 29px;
+      padding-bottom: 21px;
+    }
+
+    .ticket-shell .ticket-heading__eyebrow {
+      display: none;
+    }
+
+    .ticket-shell .ticket-heading h1 {
+      color: #fffaf1;
+      font-size: clamp(34px, 9.5vw, 43px);
+      letter-spacing: -0.055em;
+    }
+
+    .ticket-shell .ticket-heading::after {
+      display: block;
+      width: 34px;
+      height: 1px;
+      margin: 17px auto 0;
+      background: rgba(232, 185, 87, 0.5);
+      content: "";
+    }
+
+    .ticket-shell .ticket {
+      border-color: rgba(232, 185, 87, 0.36);
+      border-radius: 23px;
+      background:
+        linear-gradient(145deg, #eadfc9, #ddc9a9);
+      box-shadow:
+        0 28px 62px rgba(0, 0, 0, 0.32),
+        inset 0 0 0 1px rgba(255, 248, 230, 0.38);
+    }
+
+    .ticket-shell .ticket::before {
+      background: rgba(232, 185, 87, 0.13);
+    }
+
+    .ticket-shell .ticket::after {
+      border-color: rgba(169, 127, 54, 0.22);
+    }
+
+    .ticket-shell .ticket__no {
+      color: #916d34;
+    }
+
+    .ticket-shell .ticket__divider::after {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border-radius: 50%;
+      color: transparent;
+      background: #b9893c;
+      box-shadow: 0 0 0 5px #e3d3b8;
+      content: "";
+    }
+
+    .ticket-shell .ticket__cat-wrap::before {
+      border-color: rgba(179, 133, 54, 0.34);
+      background:
+        radial-gradient(circle, rgba(232, 185, 87, 0.2), transparent 66%),
+        #eadcc3;
+      box-shadow: 0 9px 22px rgba(92, 58, 32, 0.08);
+    }
+
+    .ticket-shell .prize-card-copy__label {
+      display: none;
+    }
+
+    .ticket-shell .prize-card-copy h2 {
+      color: #2f241e;
+    }
+
+    .ticket-shell .prize-card-copy__only {
+      color: #4f3d2e;
+      line-height: 1.75;
+    }
+
+    .ticket-shell .validity-card {
+      border-color: rgba(172, 126, 47, 0.2);
+      background: linear-gradient(135deg, rgba(249, 236, 213, 0.5), rgba(255, 250, 237, 0.42));
+      box-shadow: inset 0 1px 0 rgba(255, 248, 230, 0.4);
+    }
+
+    .ticket-shell .validity-card__label,
+    .ticket-shell .validity-card::before {
+      color: #825b20;
+    }
+
+    .ticket-shell .claim-button {
+      border: 1px solid rgba(232, 185, 87, 0.24);
+      color: #f2d89f;
+      background: #241c15;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .ticket-shell .claim-button::before {
+      display: none;
+    }
+
+    .ticket-shell .claim-button:active {
+      background: #302419;
+      color: #ffe6ad;
+    }
+
+    .ticket-shell .claim-button__heart {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 14px;
+      margin: 0 2px 0 1px;
+      overflow: visible;
+      fill: #e6c781;
+      transform-origin: center;
+      animation: heart-beat 1.8s ease-in-out infinite;
+    }
+
+    .wechat-shell .wechat-heading {
+      padding-top: 34px;
+      padding-bottom: 20px;
+    }
+
+    .wechat-shell .wechat-heading h1 {
+      color: #fffaf1;
+      font-size: clamp(36px, 10vw, 45px);
+    }
+
+    .wechat-shell .step {
+      visibility: hidden;
+    }
+
+    .wechat-shell .qr-card {
+      border-color: rgba(232, 185, 87, 0.35);
+      border-radius: 23px;
+      background:
+        linear-gradient(145deg, #eadfc9, #ddc9a9);
+      box-shadow:
+        0 28px 62px rgba(0, 0, 0, 0.32),
+        inset 0 0 0 1px rgba(255, 248, 230, 0.38);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .wechat-shell .qr-card__label {
+      color: #8d672d;
+      letter-spacing: 0.14em;
+    }
+
+    .wechat-shell .qr-card h2 {
+      color: #2f241e;
+    }
+
+    .wechat-shell .qr-card__desc {
+      color: #746357;
+    }
+
+    .wechat-shell .qr-frame {
+      border-color: rgba(169, 127, 54, 0.18);
+      box-shadow:
+        0 12px 27px rgba(80, 53, 30, 0.09),
+        0 0 0 7px rgba(196, 151, 74, 0.09);
+    }
+
+    .wechat-shell .qr-frame::before,
+    .wechat-shell .qr-frame::after {
+      border-color: #c89b4d;
+    }
+
+    .wechat-shell .qr-card__hint {
+      color: #8b796d;
+    }
+
+    .wechat-shell .qr-card__hint strong {
+      color: #8d672d;
+    }
+  </style>
+</head>
+<body>
+  <main class="experience" id="experience">
+    <section class="scene scene--dark loading-scene is-active" id="loadingScene" aria-label="正在加载">
+      <div class="shell" style="justify-content:center">
+        <div class="loading">
+          <p class="loading__eyebrow">FINAL GIFT IS COMING</p>
+          <div class="cat-medallion">
+            <img src="assets/kaojiang-cat.png" alt="">
+          </div>
+          <h1 class="loading__title">正在拆开最后一份礼物<span class="loading__dots" aria-hidden="true"></span></h1>
+          <div class="loading__track" role="progressbar" aria-label="加载礼物" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="loadingTrack">
+            <span class="loading__bar" id="loadingBar"></span>
+          </div>
+          <div class="loading__meta">
+            <span>LUCKY LOADING</span>
+            <span class="loading__percent"><span id="loadingPercent">000</span>%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--dark story-shell" id="storyScene" aria-hidden="true" aria-label="你的终极奖励">
+      <div class="shell">
+        <header class="topline topline--back">
+          <button class="back-nav" type="button" data-back-target="restart" aria-label="返回加载页">
+            <span class="back-nav__icon" aria-hidden="true">←</span>
+            <span>返回</span>
+          </button>
+          <span class="step">01 / 03</span>
+        </header>
+
+        <div class="story">
+          <div class="story__content">
+            <p class="story__label">ALL GIFTS CLEARED</p>
+            <h1>
+              <span class="story__line story__line--opening">鉴于你拆对了<br>每一项礼物</span>
+              <span class="story__line story__line--middle">这里是你的</span>
+              <span class="story__final">
+                <span class="story__line">终极奖励兑现</span>
+                <span class="story__cat-aura" aria-hidden="true">
+                  <img src="assets/kaojiang-cat.png" alt="">
+                </span>
+              </span>
+            </h1>
+          </div>
+        </div>
+
+        <div class="bottom-area">
+          <button class="continue-button" id="storyNext" type="button">
+            <span>轻触进入下一项</span>
+            <span class="continue-button__icon" aria-hidden="true">→</span>
+          </button>
+          <p class="microcopy">TAP TO CONTINUE</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--dark prize-shell" id="prizeScene" aria-hidden="true" aria-label="最终奖品">
+      <div class="shell">
+        <header class="topline topline--back">
+          <button class="back-nav" type="button" data-back-target="story" aria-label="返回上一页">
+            <span class="back-nav__icon" aria-hidden="true">←</span>
+            <span>返回</span>
+          </button>
+          <span class="step">02 / 03</span>
+        </header>
+
+        <div class="prize-stage">
+          <div class="prize-stage__ring" aria-hidden="true"></div>
+          <img class="prize-stage__cat" src="assets/kaojiang-cat.png" alt="" aria-hidden="true">
+          <div class="prize-reveal">
+            <p class="prize-reveal__kicker">FINAL REWARD</p>
+            <h2>恭喜你获得</h2>
+            <p class="prize-reveal__name">烤匠双人餐<br><em>一份</em></p>
+          </div>
+        </div>
+
+        <div class="bottom-area">
+          <button class="continue-button" id="prizeNext" type="button">
+            <span>轻触查看兑奖券</span>
+            <span class="continue-button__icon" aria-hidden="true">→</span>
+          </button>
+          <p class="microcopy">即将为你展开兑奖券</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene--dark ticket-shell" id="ticketScene" aria-hidden="true" aria-label="兑奖券">
+      <div class="shell">
+        <header class="topline topline--back">
+          <button class="back-nav" type="button" data-back-target="prize" aria-label="返回奖品页">
+            <span class="back-nav__icon" aria-hidden="true">←</span>
+            <span>返回</span>
+          </button>
+          <span class="step">03 / 03</span>
+        </header>
+
+        <div class="ticket-heading">
+          <p class="ticket-heading__eyebrow">LUCKY REWARD</p>
+          <h1>恭喜你兑奖成功！</h1>
+        </div>
+
+        <article class="ticket" aria-labelledby="ticketPrize">
+          <div class="ticket__top">
+            <div class="ticket__no">NO. 0923</div>
+          </div>
+
+          <div class="ticket__cat-wrap" aria-hidden="true">
+            <span class="spark spark--one">✦</span>
+            <span class="spark spark--two">✦</span>
+            <span class="spark spark--three">✦</span>
+            <img class="ticket__cat" src="assets/kaojiang-cat.png" alt="">
+          </div>
+
+          <div class="prize-card-copy">
+            <p class="prize-card-copy__label">YOU HAVE WON</p>
+            <h2 id="ticketPrize">烤匠双人餐 <em>一份</em></h2>
+            <p class="prize-card-copy__only">这张券没有使用说明<br>唯一的条件是：和我一起去</p>
+          </div>
+
+          <div class="ticket__divider" aria-hidden="true"></div>
+
+          <div class="ticket__details">
+            <div class="validity-card">
+              <span class="validity-card__label">兑换时效</span>
+              <span class="validity-card__value">等你啥时候有空</span>
+            </div>
+          </div>
+
+          <button class="claim-button" id="claimButton" type="button">
+            <span>收下这份好运</span>
+            <svg class="claim-button__heart" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35Z"/>
+            </svg>
+          </button>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="scene scene--dark wechat-shell" id="wechatScene" aria-hidden="true" aria-label="微信二维码">
+      <div class="shell">
+        <header class="topline topline--back">
+          <button class="back-nav" type="button" data-back-target="ticket" aria-label="返回兑奖券">
+            <span class="back-nav__icon" aria-hidden="true">←</span>
+            <span>返回</span>
+          </button>
+          <span class="step">GIFT ACCEPTED</span>
+        </header>
+
+        <div class="wechat-heading">
+          <h1>好运签收成功</h1>
+        </div>
+
+        <section class="qr-card" aria-labelledby="wechatTitle">
+          <img class="qr-card__cat" src="assets/kaojiang-cat.png" alt="" aria-hidden="true">
+          <p class="qr-card__label">SCAN TO FIND ME</p>
+          <h2 id="wechatTitle">兑换方式</h2>
+          <p class="qr-card__desc">最后一步，你得自己扫码兑现</p>
+          <div class="qr-frame">
+            <img id="wechatQr" src="assets/wechat-qr.png" width="176" height="176" alt="微信二维码，扫码了解详情">
+          </div>
+          <p class="qr-card__hint"><strong>长按二维码</strong> 也可以保存</p>
+        </section>
+
+      </div>
+    </section>
+
+    <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+    <p class="sr-only" id="sceneAnnouncer" aria-live="polite"></p>
+  </main>
+
+  <script>
+    (() => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const scenes = {
+        loading: document.getElementById("loadingScene"),
+        story: document.getElementById("storyScene"),
+        prize: document.getElementById("prizeScene"),
+        ticket: document.getElementById("ticketScene"),
+        wechat: document.getElementById("wechatScene")
+      };
+      const loadingBar = document.getElementById("loadingBar");
+      const loadingPercent = document.getElementById("loadingPercent");
+      const loadingTrack = document.getElementById("loadingTrack");
+      const storyNext = document.getElementById("storyNext");
+      const prizeNext = document.getElementById("prizeNext");
+      const claimButton = document.getElementById("claimButton");
+      const backButtons = document.querySelectorAll("[data-back-target]");
+      const confettiLayer = document.getElementById("confettiLayer");
+      const sceneAnnouncer = document.getElementById("sceneAnnouncer");
+      let activeScene = scenes.loading;
+      let transitionTimer = 0;
+
+      const announcements = {
+        story: "加载完成。鉴于你拆对了每一项礼物，这里是你的终极奖励兑现。轻触进入下一项。",
+        prize: "恭喜你获得烤匠双人餐一份，仅限跟我吃。",
+        ticket: "恭喜你兑奖成功。兑换时效无限，等你什么时候有空。",
+        wechat: "好运签收成功，请扫码了解详情。"
+      };
+
+      function showScene(next) {
+        if (!next || next === activeScene) return;
+        window.clearTimeout(transitionTimer);
+
+        const previous = activeScene;
+        previous.classList.add("is-leaving");
+        previous.classList.remove("is-active");
+        previous.setAttribute("aria-hidden", "true");
+
+        next.classList.remove("is-leaving");
+        next.classList.add("is-active");
+        next.setAttribute("aria-hidden", "false");
+        next.scrollTop = 0;
+        activeScene = next;
+
+        const matchingKey = Object.keys(scenes).find((key) => scenes[key] === next);
+        sceneAnnouncer.textContent = announcements[matchingKey] || "";
+
+        transitionTimer = window.setTimeout(() => {
+          previous.classList.remove("is-leaving");
+        }, reducedMotion ? 25 : 620);
+      }
+
+      function showPrize() {
+        if (activeScene !== scenes.story) return;
+        showScene(scenes.prize);
+        window.setTimeout(() => burst(window.innerWidth / 2, window.innerHeight * 0.42, 42), reducedMotion ? 0 : 180);
+      }
+
+      function showTicketFromPrize() {
+        if (activeScene !== scenes.prize) return;
+        showScene(scenes.ticket);
+        window.setTimeout(() => burst(window.innerWidth / 2, window.innerHeight * 0.35, 38), 140);
+      }
+
+      storyNext.addEventListener("click", showPrize);
+      prizeNext.addEventListener("click", showTicketFromPrize);
+
+      claimButton.addEventListener("click", () => {
+        const rect = claimButton.getBoundingClientRect();
+        burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 54);
+        window.setTimeout(() => {
+          showScene(scenes.wechat);
+          window.setTimeout(() => burst(window.innerWidth / 2, window.innerHeight * 0.34, 36), 180);
+        }, reducedMotion ? 20 : 270);
+      });
+
+      backButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const target = button.dataset.backTarget;
+          if (target === "restart") {
+            showScene(scenes.loading);
+            setLoadingProgress(0);
+            window.setTimeout(runLoader, reducedMotion ? 0 : 90);
+            return;
+          }
+          if (scenes[target]) showScene(scenes[target]);
+        });
+      });
+
+      function setLoadingProgress(progress) {
+        const value = Math.max(0, Math.min(100, Math.round(progress)));
+        loadingBar.style.transform = `scaleX(${value / 100})`;
+        loadingPercent.textContent = String(value).padStart(3, "0");
+        loadingTrack.setAttribute("aria-valuenow", String(value));
+      }
+
+      function runLoader() {
+        if (reducedMotion) {
+          setLoadingProgress(100);
+          window.setTimeout(() => showScene(scenes.story), 320);
+          return;
+        }
+
+        const duration = 1450;
+        const startedAt = performance.now();
+        function tick(now) {
+          const elapsed = now - startedAt;
+          const linear = Math.min(1, elapsed / duration);
+          const eased = 1 - Math.pow(1 - linear, 3);
+          const progress = eased * 100;
+          setLoadingProgress(progress);
+
+          if (linear < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            window.setTimeout(() => {
+              showScene(scenes.story);
+            }, 170);
+          }
+        }
+        requestAnimationFrame(tick);
+      }
+
+      const colors = ["#e8b957", "#f4d895", "#e96f61", "#ca554b", "#fffaf1", "#73a68e"];
+
+      function burst(originX, originY, amount = 42) {
+        if (reducedMotion || !confettiLayer) return;
+
+        for (let index = 0; index < amount; index += 1) {
+          const piece = document.createElement("span");
+          const shapeRoll = Math.random();
+          const angle = (Math.PI * 2 * index) / amount + (Math.random() - 0.5) * 0.62;
+          const distance = 48 + Math.random() * 175;
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance - 28;
+          const fall = 72 + Math.random() * 150;
+          const rotation = (Math.random() - 0.5) * 760;
+          const duration = 1250 + Math.random() * 900;
+
+          piece.className = "confetti-piece";
+          if (shapeRoll > 0.8) {
+            piece.dataset.shape = "heart";
+            piece.textContent = "♥";
+            piece.style.color = index % 3 === 0 ? "#e96f61" : index % 3 === 1 ? "#e8b957" : "#f4d895";
+          } else {
+            piece.style.background = colors[index % colors.length];
+            if (shapeRoll > 0.62) piece.dataset.shape = "circle";
+          }
+
+          piece.style.left = originX + "px";
+          piece.style.top = originY + "px";
+          confettiLayer.appendChild(piece);
+
+          piece.animate(
+            [
+              { transform: "translate3d(-50%, -50%, 0) rotate(0deg) scale(.72)", opacity: 1 },
+              {
+                transform: `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) rotate(${rotation * 0.55}deg) scale(1)`,
+                opacity: 1,
+                offset: 0.56
+              },
+              {
+                transform: `translate3d(calc(-50% + ${x * 1.18}px), calc(-50% + ${y + fall}px), 0) rotate(${rotation}deg) scale(.64)`,
+                opacity: 0
+              }
+            ],
+            {
+              duration,
+              easing: "cubic-bezier(.17,.67,.35,1)"
+            }
+          ).finished.then(() => piece.remove()).catch(() => piece.remove());
+        }
+      }
+
+      window.setTimeout(runLoader, reducedMotion ? 0 : 80);
+    })();
+  </script>
+</body>
+</html>
