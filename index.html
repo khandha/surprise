@@ -1697,6 +1697,8 @@
     }
 
     .ticket-shell .validity-card {
+      min-height: 62px;
+      padding: 9px 44px;
       border-color: rgba(172, 126, 47, 0.2);
       background: linear-gradient(135deg, rgba(249, 236, 213, 0.5), rgba(255, 250, 237, 0.42));
       box-shadow: inset 0 1px 0 rgba(255, 248, 230, 0.4);
@@ -1712,26 +1714,20 @@
       color: #f2d89f;
       background: #241c15;
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+      transform-origin: center;
+      animation: claim-breathe 2.2s ease-in-out infinite;
     }
 
     .ticket-shell .claim-button::before {
-      top: -55%;
-      bottom: -55%;
-      left: -34%;
-      width: 24%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 224, 154, 0.26),
-        rgba(255, 244, 205, 0.5),
-        transparent
-      );
-      animation: shine 2s 0.9s ease-in-out infinite;
+      display: none;
+      animation: none;
     }
 
     .ticket-shell .claim-button:active {
       background: #302419;
       color: #ffe6ad;
+      animation: none;
+      transform: scale(0.985);
     }
 
     .ticket-shell .claim-button__heart {
@@ -1802,6 +1798,16 @@
 
     .wechat-shell .qr-card__hint strong {
       color: #8d672d;
+    }
+
+    @keyframes claim-breathe {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.024);
+      }
     }
   </style>
 </head>
