@@ -624,7 +624,6 @@
       width: 106px;
       height: auto;
       filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.4));
-      transform: rotate(8deg);
       animation: cat-peek 3.2s ease-in-out infinite;
     }
 
@@ -1131,7 +1130,6 @@
       width: 84px;
       height: auto;
       filter: drop-shadow(0 11px 13px rgba(73, 48, 36, 0.18));
-      transform: rotate(-7deg);
       animation: cat-peek 3s ease-in-out infinite;
     }
 
@@ -1292,20 +1290,20 @@
     @keyframes cat-float {
       0%,
       100% {
-        transform: translateY(0) rotate(-1deg);
+        transform: translateY(0);
       }
       50% {
-        transform: translateY(-5px) rotate(1deg);
+        transform: translateY(-5px);
       }
     }
 
     @keyframes cat-peek {
       0%,
       100% {
-        transform: translateY(0) rotate(-7deg);
+        transform: translateY(0);
       }
       50% {
-        transform: translateY(-4px) rotate(-4deg);
+        transform: translateY(-4px);
       }
     }
 
