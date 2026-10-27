@@ -2104,6 +2104,10 @@
       opacity: 0;
     }
 
+    .easter-terminal-window.is-clearing .easter-terminal-foot {
+      opacity: 0;
+    }
+
     .easter-terminal-window.is-finale .easter-terminal-body {
       opacity: 0;
       pointer-events: none;
@@ -2773,18 +2777,14 @@
         haptic(12);
 
         if (step === 5) {
-          easterTerminalReplay.hidden = true;
+          terminalWindow.classList.add("is-clearing");
+          easterTerminalBody.scrollTop = 0;
           easterLineTimers.push(
             window.setTimeout(() => {
-              terminalWindow.classList.add("is-clearing");
-              easterTerminalBody.scrollTop = 0;
-              easterLineTimers.push(
-                window.setTimeout(() => {
-                  terminalWindow.classList.add("is-finale");
-                  haptic([18, 30, 45]);
-                }, 380)
-              );
-            }, 160)
+              easterTerminalReplay.hidden = true;
+              terminalWindow.classList.add("is-finale");
+              haptic([18, 30, 45]);
+            }, reducedMotion ? 0 : 420)
           );
           return;
         }
