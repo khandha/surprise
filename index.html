@@ -1897,9 +1897,10 @@
     }
 
     .easter-terminal-window {
+      position: relative;
       display: flex;
       width: min(100%, 350px);
-      max-height: calc(100svh - 36px);
+      height: min(580px, calc(100svh - 36px));
       flex-direction: column;
       overflow: hidden;
       border: 1px solid rgba(213, 173, 97, 0.42);
@@ -1967,8 +1968,8 @@
     }
 
     .easter-terminal-body {
-      min-height: 260px;
-      max-height: min(440px, calc(100svh - 210px));
+      flex: 1;
+      min-height: 0;
       overflow-y: auto;
       padding: 22px 18px 17px;
       font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
@@ -1989,6 +1990,24 @@
 
     .easter-term-line.is-visible {
       animation: easter-line-in 0.24s ease forwards;
+    }
+
+    .easter-command-text {
+      white-space: pre-wrap;
+    }
+
+    .easter-command-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 13px;
+      margin-left: 2px;
+      vertical-align: -2px;
+      background: #f0d99b;
+      animation: easter-cursor 1s steps(2, end) infinite;
+    }
+
+    .easter-command-line.is-typed .easter-command-cursor {
+      display: none;
     }
 
     .easter-term-prompt {
@@ -2030,23 +2049,30 @@
 
     .easter-terminal-finale {
       display: none;
-      min-height: 310px;
-      flex: 1;
+      position: absolute;
+      top: 45px;
+      right: 0;
+      bottom: 65px;
+      left: 0;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 34px 28px 40px;
+      background: #11100e;
       text-align: center;
     }
 
-    .easter-terminal-window.is-clearing .easter-terminal-body,
-    .easter-terminal-window.is-clearing .easter-terminal-foot {
+    .easter-terminal-window.is-clearing .easter-terminal-body {
       opacity: 0;
     }
 
-    .easter-terminal-window.is-finale .easter-terminal-body,
+    .easter-terminal-window.is-finale .easter-terminal-body {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .easter-terminal-window.is-finale .easter-terminal-foot {
-      display: none;
+      opacity: 0;
     }
 
     .easter-terminal-window.is-finale .easter-terminal-finale {
@@ -2058,7 +2084,7 @@
       margin: 0;
       color: #fff8ea;
       font-family: Georgia, "Times New Roman", var(--font);
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 500;
       line-height: 1.55;
       letter-spacing: -0.015em;
@@ -2069,10 +2095,11 @@
     .easter-finale-status {
       margin: 25px 0 0;
       color: #f0d99b;
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
+      font-family: Georgia, "Times New Roman", var(--font);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1.5;
       opacity: 0;
       transform: translateY(6px);
     }
@@ -2361,23 +2388,30 @@
         </header>
 
         <div class="easter-terminal-body">
-          <div class="easter-terminal-ready" id="easterTerminalReady">
-            <span class="easter-term-prompt">$</span><span class="easter-cursor" aria-hidden="true"></span>
+          <div class="easter-term-line easter-command-line" data-command-step="1">
+            <span class="easter-term-prompt">$</span><span class="easter-command-text" data-command-text=" git status"></span><span class="easter-command-cursor" aria-hidden="true"></span>
           </div>
-          <div class="easter-term-line" data-step="1"><span class="easter-term-prompt">$</span> git status</div>
-          <div class="easter-term-line" data-step="1">On branch with-you</div>
-          <div class="easter-term-line" data-step="1">Untracked files:</div>
-          <div class="easter-term-line" data-step="1">  (use "git add &lt;file&gt;..." to include in what will be committed)</div>
-          <div class="easter-term-line" data-step="1">        <span class="easter-term-success">dinner</span></div>
-          <div class="easter-term-line" data-step="1">&nbsp;</div>
-          <div class="easter-term-line" data-step="2"><span class="easter-term-prompt">$</span> git add dinner</div>
-          <div class="easter-term-line" data-step="2"><span class="easter-cursor" aria-hidden="true"></span></div>
-          <div class="easter-term-line" data-step="3"><span class="easter-term-prompt">$</span> git commit -m "forever"</div>
-          <div class="easter-term-line" data-step="3">[with-you 0923] <span class="easter-term-branch">forever</span></div>
-          <div class="easter-term-line" data-step="3"> 1 file changed, 1 insertion(+)</div>
-          <div class="easter-term-line" data-step="4"><span class="easter-term-prompt">$</span> git checkout main</div>
-          <div class="easter-term-line" data-step="4">Switched to branch 'main'</div>
-          <div class="easter-term-line" data-step="5"><span class="easter-term-prompt">$</span> git merge with-you --no-commit</div>
+          <div class="easter-term-line easter-output-line" data-step="1">On branch with-you</div>
+          <div class="easter-term-line easter-output-line" data-step="1">Untracked files:</div>
+          <div class="easter-term-line easter-output-line" data-step="1">  (use "git add &lt;file&gt;..." to include in what will be committed)</div>
+          <div class="easter-term-line easter-output-line" data-step="1">        <span class="easter-term-success">dinner</span></div>
+          <div class="easter-term-line easter-output-line" data-step="1">&nbsp;</div>
+          <div class="easter-term-line easter-command-line" data-command-step="2">
+            <span class="easter-term-prompt">$</span><span class="easter-command-text" data-command-text=" git add dinner"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+          </div>
+          <div class="easter-term-line easter-output-line" data-step="2"><span class="easter-cursor" aria-hidden="true"></span></div>
+          <div class="easter-term-line easter-command-line" data-command-step="3">
+            <span class="easter-term-prompt">$</span><span class="easter-command-text" data-command-text=' git commit -m "forever"'></span><span class="easter-command-cursor" aria-hidden="true"></span>
+          </div>
+          <div class="easter-term-line easter-output-line" data-step="3">[with-you 0923] <span class="easter-term-branch">forever</span></div>
+          <div class="easter-term-line easter-output-line" data-step="3"> 1 file changed, 1 insertion(+)</div>
+          <div class="easter-term-line easter-command-line" data-command-step="4">
+            <span class="easter-term-prompt">$</span><span class="easter-command-text" data-command-text=" git checkout main"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+          </div>
+          <div class="easter-term-line easter-output-line" data-step="4">Switched to branch 'main'</div>
+          <div class="easter-term-line easter-command-line" data-command-step="5">
+            <span class="easter-term-prompt">$</span><span class="easter-command-text" data-command-text=" git merge with-you --no-commit"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+          </div>
         </div>
 
         <div class="easter-terminal-finale" aria-live="polite">
@@ -2418,8 +2452,9 @@
       const easterTerminalClose = document.getElementById("easterTerminalClose");
       const easterTerminalReplay = document.getElementById("easterTerminalReplay");
       const easterTerminalBody = document.querySelector(".easter-terminal-body");
-      const easterTerminalReady = document.getElementById("easterTerminalReady");
-      const easterTerminalLines = [...document.querySelectorAll(".easter-term-line")];
+      const easterCommandLines = [...document.querySelectorAll(".easter-command-line")];
+      const easterOutputLines = [...document.querySelectorAll(".easter-output-line")];
+      const easterTerminalLines = [...easterCommandLines, ...easterOutputLines];
       const backButtons = document.querySelectorAll("[data-back-target]");
       const confettiLayer = document.getElementById("confettiLayer");
       const sceneAnnouncer = document.getElementById("sceneAnnouncer");
@@ -2429,6 +2464,7 @@
       let easterRunStep = 0;
       let easterResetTimer = 0;
       let easterLineTimers = [];
+      let easterTypingTimer = 0;
 
       const announcements = {
         story: "加载完成。鉴于你拆对了每一项礼物，这里是你的终极奖励兑现。轻触进入下一项。",
@@ -2512,45 +2548,100 @@
 
       function resetTerminalView() {
         clearEasterLineTimers();
+        window.clearTimeout(easterTypingTimer);
         easterRunStep = 0;
-        easterTerminalLines.forEach((line) => line.classList.remove("is-visible"));
-        easterTerminalReady.classList.remove("is-hidden");
+        easterTerminalLines.forEach((line) => line.classList.remove("is-visible", "is-typed"));
+        easterCommandLines.forEach((line) => {
+          line.querySelector(".easter-command-text").textContent = "";
+        });
         easterTerminalOverlay
           .querySelector(".easter-terminal-window")
           .classList.remove("is-clearing", "is-finale", "is-running");
         easterTerminalBody.scrollTop = 0;
         easterTerminalReplay.hidden = false;
-        easterTerminalReplay.disabled = false;
-        easterTerminalReplay.textContent = "RUN";
-        easterTerminalReplay.setAttribute("aria-label", "运行下一步");
+        easterTerminalReplay.disabled = true;
+        easterTerminalReplay.textContent = "LOADING";
+        easterTerminalReplay.setAttribute("aria-label", "正在载入下一步命令");
       }
 
-      function finishEasterStep(nextStep) {
-        const terminalWindow = easterTerminalOverlay.querySelector(
-          ".easter-terminal-window"
-        );
-        terminalWindow.classList.remove("is-running");
+      function enableRunButton(step) {
         easterTerminalReplay.disabled = false;
+        easterTerminalReplay.textContent = "RUN";
+        easterTerminalReplay.setAttribute("aria-label", `运行第 ${step} 步`);
+      }
+
+      function typeEasterCommand(step) {
+        window.clearTimeout(easterTypingTimer);
+        easterRunStep = step;
+        const line = easterCommandLines.find(
+          (item) => Number(item.dataset.commandStep) === step
+        );
+        if (!line) return;
+
+        const textNode = line.querySelector(".easter-command-text");
+        const fullText = textNode.dataset.commandText;
+        textNode.textContent = "";
+        line.classList.add("is-visible");
+        line.classList.remove("is-typed");
+        easterTerminalReplay.disabled = true;
+        easterTerminalReplay.textContent = "TYPING";
         easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
 
-        if (nextStep === 5) {
-          easterTerminalReplay.hidden = true;
-          easterTerminalReplay.disabled = true;
-          easterLineTimers.push(
-            window.setTimeout(() => {
-              terminalWindow.classList.add("is-clearing");
-              easterLineTimers.push(
-                window.setTimeout(() => {
-                  terminalWindow.classList.add("is-finale");
-                  haptic([18, 30, 45]);
-                }, 380)
-              );
-            }, 1000)
-          );
-        } else {
-          easterTerminalReplay.textContent = "RUN";
-          haptic(8);
+        if (reducedMotion) {
+          textNode.textContent = fullText;
+          line.classList.add("is-typed");
+          enableRunButton(step);
+          return;
         }
+
+        let cursor = 0;
+        function typeNextCharacter() {
+          if (!easterTerminalOverlay.classList.contains("is-open")) return;
+          cursor += 1;
+          textNode.textContent = fullText.slice(0, cursor);
+          easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+
+          if (cursor < fullText.length) {
+            easterTypingTimer = window.setTimeout(typeNextCharacter, 24);
+          } else {
+            line.classList.add("is-typed");
+            enableRunButton(step);
+            easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+          }
+        }
+        typeNextCharacter();
+      }
+
+      function revealEasterOutputs(step) {
+        const outputs = easterOutputLines.filter(
+          (line) => Number(line.dataset.step) === step
+        );
+        clearEasterLineTimers();
+
+        if (reducedMotion) {
+          outputs.forEach((line) => line.classList.add("is-visible"));
+        } else {
+          outputs.forEach((line, index) => {
+            easterLineTimers.push(
+              window.setTimeout(() => {
+                line.classList.add("is-visible");
+                easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+              }, 70 + index * 95)
+            );
+          });
+        }
+
+        const outputDuration = reducedMotion ? 0 : 70 + outputs.length * 95;
+        easterLineTimers.push(
+          window.setTimeout(() => {
+            easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+            if (step < 5) {
+              easterLineTimers.push(
+                window.setTimeout(() => typeEasterCommand(step + 1), 500)
+              );
+            }
+          }, outputDuration)
+        );
       }
 
       function runEasterTerminal() {
@@ -2564,40 +2655,31 @@
         const terminalWindow = easterTerminalOverlay.querySelector(
           ".easter-terminal-window"
         );
-        const nextStep = easterRunStep + 1;
-        const stepLines = easterTerminalLines.filter(
-          (line) => Number(line.dataset.step) === nextStep
-        );
-        if (!stepLines.length) return;
-
+        const step = easterRunStep;
+        if (!step) return;
         clearEasterLineTimers();
-        easterTerminalReady.classList.add("is-hidden");
-        terminalWindow.classList.add("is-running");
         easterTerminalReplay.disabled = true;
         easterTerminalReplay.textContent = "RUNNING";
         haptic(12);
-        easterRunStep = nextStep;
 
-        if (reducedMotion) {
-          stepLines.forEach((line) => line.classList.add("is-visible"));
-          finishEasterStep(nextStep);
+        if (step === 5) {
+          easterTerminalReplay.hidden = true;
+          easterLineTimers.push(
+            window.setTimeout(() => {
+              terminalWindow.classList.add("is-clearing");
+              easterTerminalBody.scrollTop = 0;
+              easterLineTimers.push(
+                window.setTimeout(() => {
+                  terminalWindow.classList.add("is-finale");
+                  haptic([18, 30, 45]);
+                }, 380)
+              );
+            }, 160)
+          );
           return;
         }
 
-        stepLines.forEach((line, index) => {
-          easterLineTimers.push(
-            window.setTimeout(() => {
-              line.classList.add("is-visible");
-              easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
-            }, 70 + index * 95)
-          );
-        });
-        easterLineTimers.push(
-          window.setTimeout(
-            () => finishEasterStep(nextStep),
-            70 + stepLines.length * 95
-          )
-        );
+        revealEasterOutputs(step);
       }
 
       function openEasterTerminal() {
@@ -2607,6 +2689,10 @@
         haptic([22, 35, 55]);
         resetTerminalView();
         window.setTimeout(
+          () => typeEasterCommand(1),
+          reducedMotion ? 0 : 220
+        );
+        window.setTimeout(
           () => easterTerminalReplay.focus(),
           reducedMotion ? 20 : 380
         );
@@ -2615,6 +2701,7 @@
       function resetEasterEgg() {
         window.clearTimeout(easterResetTimer);
         clearEasterLineTimers();
+        window.clearTimeout(easterTypingTimer);
         easterTapCount = 0;
         easterDots.forEach((dot) => dot.classList.remove("is-filled"));
         easterTerminalOverlay.classList.remove("is-open");
