@@ -1897,7 +1897,10 @@
     }
 
     .easter-terminal-window {
+      display: flex;
       width: min(100%, 350px);
+      max-height: calc(100svh - 36px);
+      flex-direction: column;
       overflow: hidden;
       border: 1px solid rgba(213, 173, 97, 0.42);
       border-radius: 19px;
@@ -1964,12 +1967,16 @@
     }
 
     .easter-terminal-body {
-      min-height: 310px;
+      min-height: 260px;
+      max-height: min(440px, calc(100svh - 210px));
+      overflow-y: auto;
       padding: 22px 18px 17px;
       font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
-      font-size: 12.5px;
-      line-height: 1.85;
+      font-size: 12px;
+      line-height: 1.7;
       text-align: left;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
     }
 
     .easter-term-line {
@@ -1999,15 +2006,45 @@
       color: #cfe4cb;
     }
 
-    .easter-term-final {
-      margin-top: 13px;
-      padding-top: 13px;
-      border-top: 1px solid rgba(255, 255, 255, 0.075);
+    .easter-terminal-ready {
+      color: rgba(255, 250, 241, 0.72);
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .easter-terminal-ready.is-hidden {
+      display: none;
+    }
+
+    .easter-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 14px;
+      margin-left: 5px;
+      vertical-align: -2px;
+      background: #f0d99b;
+      animation: easter-cursor 1s steps(2, end) infinite;
+    }
+
+    .easter-term-verdict {
+      display: none;
+      margin-top: 15px;
+      padding: 13px 14px;
+      border-top: 1px solid rgba(213, 173, 97, 0.18);
+      border-radius: 10px;
       color: #fff8ea;
+      background: rgba(213, 173, 97, 0.07);
       font-family: var(--font);
-      font-size: 14px;
-      font-weight: 650;
-      line-height: 1.65;
+      font-size: 13px;
+      font-weight: 620;
+      line-height: 1.75;
+      text-align: center;
+    }
+
+    .easter-terminal-window.is-complete .easter-term-verdict {
+      display: block;
+      animation: easter-line-in 0.35s ease both;
     }
 
     .easter-terminal-foot {
@@ -2026,14 +2063,24 @@
     }
 
     .easter-terminal-replay {
-      min-height: 36px;
-      padding: 0 14px;
-      border: 1px solid rgba(213, 173, 97, 0.28);
+      min-width: 82px;
+      min-height: 38px;
+      padding: 0 16px;
+      border: 1px solid #d5ad61;
       border-radius: 999px;
-      color: #f0d99b;
-      background: rgba(213, 173, 97, 0.08);
-      font-size: 11px;
+      color: #21180f;
+      background: #d5ad61;
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       cursor: pointer;
+      min-height: 44px;
+    }
+
+    .easter-terminal-replay:disabled {
+      cursor: default;
+      opacity: 0.55;
     }
 
     @keyframes claim-breathe {
@@ -2060,6 +2107,12 @@
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @keyframes easter-cursor {
+      50% {
+        opacity: 0;
       }
     }
 
@@ -2263,23 +2316,40 @@
         </header>
 
         <div class="easter-terminal-body">
-          <div class="easter-term-line"><span class="easter-term-prompt">$</span> git status</div>
-          <div class="easter-term-line">On branch <span class="easter-term-branch">with-you</span></div>
-          <div class="easter-term-line">Untracked files:</div>
-          <div class="easter-term-line">        <span class="easter-term-success">dinner</span></div>
-          <div class="easter-term-line">&nbsp;</div>
-          <div class="easter-term-line"><span class="easter-term-prompt">$</span> git commit -am "去吃饭吧"</div>
-          <div class="easter-term-line">[with-you 0923] <span class="easter-term-branch">forever</span></div>
-          <div class="easter-term-line">&nbsp;</div>
-          <div class="easter-term-line"><span class="easter-term-prompt">$</span> git merge with-you into main</div>
-          <div class="easter-term-line">Fast-forward</div>
-          <div class="easter-term-line">[main 0923] <span class="easter-term-branch">forever</span></div>
-          <div class="easter-term-line easter-term-final">彩蛋已解锁。<br>剩下的，我们边吃边聊。</div>
+          <div class="easter-terminal-ready" id="easterTerminalReady">
+            <span class="easter-term-prompt">$</span><span class="easter-cursor" aria-hidden="true"></span>
+          </div>
+          <div class="easter-term-line" data-step="1"><span class="easter-term-prompt">$</span> git status</div>
+          <div class="easter-term-line" data-step="1">On branch <span class="easter-term-branch">with-you</span></div>
+          <div class="easter-term-line" data-step="1">Untracked files:</div>
+          <div class="easter-term-line" data-step="1">  (use "git add &lt;file&gt;..." to include in what will be committed)</div>
+          <div class="easter-term-line" data-step="1">        <span class="easter-term-success">dinner</span></div>
+          <div class="easter-term-line" data-step="1">&nbsp;</div>
+          <div class="easter-term-line" data-step="2"><span class="easter-term-prompt">$</span> git add dinner</div>
+          <div class="easter-term-line" data-step="3"><span class="easter-term-prompt">$</span> git commit -m "forever"</div>
+          <div class="easter-term-line" data-step="3">[with-you 0923] <span class="easter-term-branch">forever</span></div>
+          <div class="easter-term-line" data-step="3"> 1 file changed, 1 insertion(+)</div>
+          <div class="easter-term-line" data-step="3">&nbsp;</div>
+          <div class="easter-term-line" data-step="4"><span class="easter-term-prompt">$</span> git checkout main</div>
+          <div class="easter-term-line" data-step="4">Switched to branch 'main'</div>
+          <div class="easter-term-line" data-step="4">&nbsp;</div>
+          <div class="easter-term-line" data-step="5"><span class="easter-term-prompt">$</span> git merge with-you</div>
+          <div class="easter-term-line" data-step="5">Updating a1b2c3d..0923e4f</div>
+          <div class="easter-term-line" data-step="5">Fast-forward</div>
+          <div class="easter-term-line" data-step="5"> dinner | 1 +</div>
+          <div class="easter-term-line" data-step="5"> 1 file changed, 1 insertion(+)</div>
+          <div class="easter-term-line" data-step="5">&nbsp;</div>
+          <div class="easter-term-line" data-step="5">[main 0923] <span class="easter-term-branch">forever</span></div>
+          <div class="easter-term-verdict">
+            待你决定<br>
+            未完待续<br>
+            等你有空
+          </div>
         </div>
 
         <footer class="easter-terminal-foot">
           <span class="easter-terminal-hint">hidden branch: 0923</span>
-          <button class="easter-terminal-replay" id="easterTerminalReplay" type="button">再看一次</button>
+          <button class="easter-terminal-replay" id="easterTerminalReplay" type="button">RUN</button>
         </footer>
       </section>
     </div>
@@ -2309,6 +2379,8 @@
       const easterTerminalOverlay = document.getElementById("easterTerminalOverlay");
       const easterTerminalClose = document.getElementById("easterTerminalClose");
       const easterTerminalReplay = document.getElementById("easterTerminalReplay");
+      const easterTerminalBody = document.querySelector(".easter-terminal-body");
+      const easterTerminalReady = document.getElementById("easterTerminalReady");
       const easterTerminalLines = [...document.querySelectorAll(".easter-term-line")];
       const backButtons = document.querySelectorAll("[data-back-target]");
       const confettiLayer = document.getElementById("confettiLayer");
@@ -2316,6 +2388,7 @@
       let activeScene = scenes.loading;
       let transitionTimer = 0;
       let easterTapCount = 0;
+      let easterRunStep = 0;
       let easterResetTimer = 0;
       let easterLineTimers = [];
 
@@ -2399,22 +2472,94 @@
         easterLineTimers = [];
       }
 
-      function typeEasterTerminal() {
+      function resetTerminalView() {
         clearEasterLineTimers();
+        easterRunStep = 0;
         easterTerminalLines.forEach((line) => line.classList.remove("is-visible"));
+        easterTerminalReady.classList.remove("is-hidden");
+        easterTerminalOverlay
+          .querySelector(".easter-terminal-window")
+          .classList.remove("is-complete", "is-running");
+        easterTerminalBody.scrollTop = 0;
+        easterTerminalReplay.disabled = false;
+        easterTerminalReplay.textContent = "RUN";
+        easterTerminalReplay.setAttribute("aria-label", "运行下一步");
+      }
 
-        if (reducedMotion) {
-          easterTerminalLines.forEach((line) => line.classList.add("is-visible"));
+      function finishEasterStep(nextStep) {
+        const terminalWindow = easterTerminalOverlay.querySelector(
+          ".easter-terminal-window"
+        );
+        terminalWindow.classList.remove("is-running");
+        easterTerminalReplay.disabled = false;
+        easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+
+        if (nextStep >= 5) {
+          terminalWindow.classList.add("is-complete");
+          easterTerminalReplay.textContent = "RUN AGAIN";
+          easterTerminalReplay.setAttribute("aria-label", "重新运行隐藏终端");
+          haptic([18, 30, 45]);
+          requestAnimationFrame(() => {
+            easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+          });
+          window.setTimeout(() => {
+            easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+          }, 90);
+        } else {
+          easterTerminalReplay.textContent = "RUN";
+          haptic(8);
+        }
+      }
+
+      function runEasterTerminal() {
+        if (
+          !easterTerminalOverlay.classList.contains("is-open") ||
+          easterTerminalReplay.disabled
+        ) {
           return;
         }
 
-        easterTerminalLines.forEach((line, index) => {
+        const terminalWindow = easterTerminalOverlay.querySelector(
+          ".easter-terminal-window"
+        );
+        if (terminalWindow.classList.contains("is-complete")) {
+          resetTerminalView();
+        }
+
+        const nextStep = easterRunStep + 1;
+        const stepLines = easterTerminalLines.filter(
+          (line) => Number(line.dataset.step) === nextStep
+        );
+        if (!stepLines.length) return;
+
+        clearEasterLineTimers();
+        easterTerminalReady.classList.add("is-hidden");
+        terminalWindow.classList.add("is-running");
+        easterTerminalReplay.disabled = true;
+        easterTerminalReplay.textContent = "RUNNING";
+        haptic(12);
+        easterRunStep = nextStep;
+
+        if (reducedMotion) {
+          stepLines.forEach((line) => line.classList.add("is-visible"));
+          finishEasterStep(nextStep);
+          return;
+        }
+
+        stepLines.forEach((line, index) => {
           easterLineTimers.push(
             window.setTimeout(() => {
               line.classList.add("is-visible");
-            }, 180 + index * 260)
+              easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+            }, 70 + index * 95)
           );
         });
+        easterLineTimers.push(
+          window.setTimeout(
+            () => finishEasterStep(nextStep),
+            70 + stepLines.length * 95
+          )
+        );
       }
 
       function openEasterTerminal() {
@@ -2422,9 +2567,9 @@
         easterTerminalOverlay.setAttribute("aria-hidden", "false");
         easterCatTrigger.setAttribute("aria-label", "黑猫，隐藏内容已解锁");
         haptic([22, 35, 55]);
-        typeEasterTerminal();
+        resetTerminalView();
         window.setTimeout(
-          () => easterTerminalClose.focus(),
+          () => easterTerminalReplay.focus(),
           reducedMotion ? 20 : 380
         );
       }
@@ -2436,7 +2581,7 @@
         easterDots.forEach((dot) => dot.classList.remove("is-filled"));
         easterTerminalOverlay.classList.remove("is-open");
         easterTerminalOverlay.setAttribute("aria-hidden", "true");
-        easterTerminalLines.forEach((line) => line.classList.remove("is-visible"));
+        resetTerminalView();
         easterCatTrigger.setAttribute("aria-label", "黑猫");
         easterCatTrigger.focus();
       }
@@ -2465,7 +2610,7 @@
       });
 
       easterTerminalClose.addEventListener("click", resetEasterEgg);
-      easterTerminalReplay.addEventListener("click", typeEasterTerminal);
+      easterTerminalReplay.addEventListener("click", runEasterTerminal);
       easterTerminalOverlay.addEventListener("click", (event) => {
         if (event.target === easterTerminalOverlay) resetEasterEgg();
       });
