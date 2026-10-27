@@ -1982,6 +1982,7 @@
     }
 
     .easter-term-line {
+      display: none;
       min-height: 23px;
       opacity: 0;
       white-space: pre-wrap;
@@ -1989,7 +1990,14 @@
     }
 
     .easter-term-line.is-visible {
+      display: block;
       animation: easter-line-in 0.24s ease forwards;
+    }
+
+    .easter-command-line,
+    .easter-output-line {
+      width: 100%;
+      text-align: left;
     }
 
     .easter-command-text {
@@ -2573,6 +2581,12 @@
       function typeEasterCommand(step) {
         window.clearTimeout(easterTypingTimer);
         easterRunStep = step;
+        if (step > 2) {
+          const stepTwoCursor = easterOutputLines.find(
+            (line) => Number(line.dataset.step) === 2
+          );
+          if (stepTwoCursor) stepTwoCursor.classList.remove("is-visible");
+        }
         const line = easterCommandLines.find(
           (item) => Number(item.dataset.commandStep) === step
         );
