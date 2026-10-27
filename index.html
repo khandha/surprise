@@ -1800,6 +1800,242 @@
       color: #8d672d;
     }
 
+    .ticket-cat-trigger {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      width: 120px;
+      height: 122px;
+      padding: 0;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .ticket-cat-trigger:focus-visible {
+      outline: 2px solid rgba(184, 136, 58, 0.5);
+      outline-offset: 4px;
+    }
+
+    .ticket-cat-trigger .ticket__cat {
+      pointer-events: none;
+    }
+
+    .ticket-cat-trigger.is-tapped {
+      animation: cat-tap 0.18s ease-out;
+    }
+
+    .easter-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border: 1px solid rgba(165, 117, 48, 0.34);
+      border-radius: 50%;
+      background: rgba(255, 250, 239, 0.48);
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .easter-dot.is-filled {
+      border-color: #b98738;
+      background: #c99946;
+      box-shadow: 0 0 0 3px rgba(183, 133, 52, 0.09);
+      transform: scale(1.18);
+    }
+
+    .easter-dot--one {
+      top: 20px;
+      left: 13px;
+    }
+
+    .easter-dot--two {
+      bottom: 25px;
+      left: 13px;
+    }
+
+    .easter-dot--three {
+      bottom: 6px;
+      left: 57px;
+    }
+
+    .easter-dot--four {
+      right: 13px;
+      bottom: 25px;
+    }
+
+    .easter-dot--five {
+      top: 20px;
+      right: 13px;
+    }
+
+    .easter-terminal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      visibility: hidden;
+      opacity: 0;
+      background: rgba(5, 4, 3, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: opacity 0.35s ease, visibility 0.35s;
+    }
+
+    .easter-terminal-overlay.is-open {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .easter-terminal-window {
+      width: min(100%, 350px);
+      overflow: hidden;
+      border: 1px solid rgba(213, 173, 97, 0.42);
+      border-radius: 19px;
+      color: #f7efe2;
+      background: #11100e;
+      box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.58),
+        0 0 0 1px rgba(255, 255, 255, 0.025);
+      transform: translateY(18px) scale(0.96);
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .easter-terminal-overlay.is-open .easter-terminal-window {
+      transform: translateY(0) scale(1);
+    }
+
+    .easter-terminal-head {
+      display: flex;
+      height: 45px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+      background: rgba(255, 255, 255, 0.022);
+    }
+
+    .easter-terminal-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .easter-terminal-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(213, 173, 97, 0.48);
+    }
+
+    .easter-terminal-title {
+      color: rgba(255, 250, 241, 0.5);
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      letter-spacing: 0.03em;
+    }
+
+    .easter-terminal-close {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 0;
+      border-radius: 9px;
+      color: rgba(255, 250, 241, 0.56);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 19px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .easter-terminal-close:focus-visible,
+    .easter-terminal-replay:focus-visible {
+      outline: 2px solid #f0d99b;
+      outline-offset: 3px;
+    }
+
+    .easter-terminal-body {
+      min-height: 310px;
+      padding: 22px 18px 17px;
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.85;
+      text-align: left;
+    }
+
+    .easter-term-line {
+      min-height: 23px;
+      opacity: 0;
+      white-space: pre-wrap;
+      transform: translateY(3px);
+    }
+
+    .easter-term-line.is-visible {
+      animation: easter-line-in 0.24s ease forwards;
+    }
+
+    .easter-term-prompt {
+      color: #e7bf70;
+    }
+
+    .easter-term-branch {
+      color: #f0d99b;
+    }
+
+    .easter-term-muted {
+      color: rgba(255, 250, 241, 0.42);
+    }
+
+    .easter-term-success {
+      color: #cfe4cb;
+    }
+
+    .easter-term-final {
+      margin-top: 13px;
+      padding-top: 13px;
+      border-top: 1px solid rgba(255, 255, 255, 0.075);
+      color: #fff8ea;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 650;
+      line-height: 1.65;
+    }
+
+    .easter-terminal-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 15px 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.075);
+    }
+
+    .easter-terminal-hint {
+      color: rgba(255, 250, 241, 0.34);
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+    }
+
+    .easter-terminal-replay {
+      min-height: 36px;
+      padding: 0 14px;
+      border: 1px solid rgba(213, 173, 97, 0.28);
+      border-radius: 999px;
+      color: #f0d99b;
+      background: rgba(213, 173, 97, 0.08);
+      font-size: 11px;
+      cursor: pointer;
+    }
+
     @keyframes claim-breathe {
       0%,
       100% {
@@ -1807,6 +2043,36 @@
       }
       50% {
         transform: scale(1.024);
+      }
+    }
+
+    @keyframes cat-tap {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.94);
+      }
+    }
+
+    @keyframes easter-line-in {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .easter-terminal-overlay {
+        padding: 12px;
+      }
+
+      .easter-terminal-body {
+        min-height: 292px;
+        padding-right: 14px;
+        padding-left: 14px;
+        font-size: 11.5px;
       }
     }
   </style>
@@ -1918,11 +2184,18 @@
             <div class="ticket__no">NO. 0923</div>
           </div>
 
-          <div class="ticket__cat-wrap" aria-hidden="true">
-            <span class="spark spark--one">✦</span>
-            <span class="spark spark--two">✦</span>
-            <span class="spark spark--three">✦</span>
-            <img class="ticket__cat" src="assets/kaojiang-cat.png" alt="">
+          <div class="ticket__cat-wrap">
+            <span class="spark spark--one" aria-hidden="true">✦</span>
+            <span class="spark spark--two" aria-hidden="true">✦</span>
+            <span class="spark spark--three" aria-hidden="true">✦</span>
+            <button class="ticket-cat-trigger" id="easterCatTrigger" type="button" aria-label="黑猫">
+              <span class="easter-dot easter-dot--one" aria-hidden="true"></span>
+              <span class="easter-dot easter-dot--two" aria-hidden="true"></span>
+              <span class="easter-dot easter-dot--three" aria-hidden="true"></span>
+              <span class="easter-dot easter-dot--four" aria-hidden="true"></span>
+              <span class="easter-dot easter-dot--five" aria-hidden="true"></span>
+              <img class="ticket__cat" src="assets/kaojiang-cat.png" alt="">
+            </button>
           </div>
 
           <div class="prize-card-copy">
@@ -1979,6 +2252,32 @@
       </div>
     </section>
 
+    <div class="easter-terminal-overlay" id="easterTerminalOverlay" aria-hidden="true">
+      <section class="easter-terminal-window" role="dialog" aria-modal="true" aria-labelledby="easterTerminalTitle">
+        <header class="easter-terminal-head">
+          <span class="easter-terminal-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span class="easter-terminal-title" id="easterTerminalTitle">you@surprise: ~</span>
+          <button class="easter-terminal-close" id="easterTerminalClose" type="button" aria-label="关闭终端">×</button>
+        </header>
+
+        <div class="easter-terminal-body">
+          <div class="easter-term-line"><span class="easter-term-prompt">$</span> git status</div>
+          <div class="easter-term-line"><span class="easter-term-muted">On branch:</span> <span class="easter-term-branch">with-you</span></div>
+          <div class="easter-term-line"><span class="easter-term-success">1 dinner pending</span></div>
+          <div class="easter-term-line"><span class="easter-term-prompt">$</span> git commit -m "去吃饭吧"</div>
+          <div class="easter-term-line"><span class="easter-term-muted">[main 0923]</span> forever</div>
+          <div class="easter-term-line easter-term-final">彩蛋已解锁。<br>剩下的，我们边吃边聊。</div>
+        </div>
+
+        <footer class="easter-terminal-foot">
+          <span class="easter-terminal-hint">hidden branch: 0923</span>
+          <button class="easter-terminal-replay" id="easterTerminalReplay" type="button">再看一次</button>
+        </footer>
+      </section>
+    </div>
+
     <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
     <p class="sr-only" id="sceneAnnouncer" aria-live="polite"></p>
   </main>
@@ -1999,11 +2298,20 @@
       const storyNext = document.getElementById("storyNext");
       const prizeNext = document.getElementById("prizeNext");
       const claimButton = document.getElementById("claimButton");
+      const easterCatTrigger = document.getElementById("easterCatTrigger");
+      const easterDots = [...document.querySelectorAll(".easter-dot")];
+      const easterTerminalOverlay = document.getElementById("easterTerminalOverlay");
+      const easterTerminalClose = document.getElementById("easterTerminalClose");
+      const easterTerminalReplay = document.getElementById("easterTerminalReplay");
+      const easterTerminalLines = [...document.querySelectorAll(".easter-term-line")];
       const backButtons = document.querySelectorAll("[data-back-target]");
       const confettiLayer = document.getElementById("confettiLayer");
       const sceneAnnouncer = document.getElementById("sceneAnnouncer");
       let activeScene = scenes.loading;
       let transitionTimer = 0;
+      let easterTapCount = 0;
+      let easterResetTimer = 0;
+      let easterLineTimers = [];
 
       const announcements = {
         story: "加载完成。鉴于你拆对了每一项礼物，这里是你的终极奖励兑现。轻触进入下一项。",
@@ -2070,6 +2378,98 @@
           }
           if (scenes[target]) showScene(scenes[target]);
         });
+      });
+
+      function haptic(pattern) {
+        try {
+          if (typeof navigator.vibrate === "function") navigator.vibrate(pattern);
+        } catch (_) {
+          // Vibration is optional and not exposed by every mobile browser.
+        }
+      }
+
+      function clearEasterLineTimers() {
+        easterLineTimers.forEach((timer) => window.clearTimeout(timer));
+        easterLineTimers = [];
+      }
+
+      function typeEasterTerminal() {
+        clearEasterLineTimers();
+        easterTerminalLines.forEach((line) => line.classList.remove("is-visible"));
+
+        if (reducedMotion) {
+          easterTerminalLines.forEach((line) => line.classList.add("is-visible"));
+          return;
+        }
+
+        easterTerminalLines.forEach((line, index) => {
+          easterLineTimers.push(
+            window.setTimeout(() => {
+              line.classList.add("is-visible");
+            }, 180 + index * 260)
+          );
+        });
+      }
+
+      function openEasterTerminal() {
+        easterTerminalOverlay.classList.add("is-open");
+        easterTerminalOverlay.setAttribute("aria-hidden", "false");
+        easterCatTrigger.setAttribute("aria-label", "黑猫，隐藏内容已解锁");
+        haptic([22, 35, 55]);
+        typeEasterTerminal();
+        window.setTimeout(
+          () => easterTerminalClose.focus(),
+          reducedMotion ? 20 : 380
+        );
+      }
+
+      function resetEasterEgg() {
+        window.clearTimeout(easterResetTimer);
+        clearEasterLineTimers();
+        easterTapCount = 0;
+        easterDots.forEach((dot) => dot.classList.remove("is-filled"));
+        easterTerminalOverlay.classList.remove("is-open");
+        easterTerminalOverlay.setAttribute("aria-hidden", "true");
+        easterTerminalLines.forEach((line) => line.classList.remove("is-visible"));
+        easterCatTrigger.setAttribute("aria-label", "黑猫");
+        easterCatTrigger.focus();
+      }
+
+      easterCatTrigger.addEventListener("click", () => {
+        if (activeScene !== scenes.ticket || easterTapCount >= 5) return;
+        window.clearTimeout(easterResetTimer);
+        easterTapCount += 1;
+        easterDots.forEach((dot, index) => {
+          dot.classList.toggle("is-filled", index < easterTapCount);
+        });
+        easterCatTrigger.classList.remove("is-tapped");
+        void easterCatTrigger.offsetWidth;
+        easterCatTrigger.classList.add("is-tapped");
+        haptic(10);
+
+        if (easterTapCount === 5) {
+          openEasterTerminal();
+          return;
+        }
+
+        easterResetTimer = window.setTimeout(() => {
+          easterTapCount = 0;
+          easterDots.forEach((dot) => dot.classList.remove("is-filled"));
+        }, 5000);
+      });
+
+      easterTerminalClose.addEventListener("click", resetEasterEgg);
+      easterTerminalReplay.addEventListener("click", typeEasterTerminal);
+      easterTerminalOverlay.addEventListener("click", (event) => {
+        if (event.target === easterTerminalOverlay) resetEasterEgg();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          easterTerminalOverlay.classList.contains("is-open")
+        ) {
+          resetEasterEgg();
+        }
       });
 
       function setLoadingProgress(progress) {
