@@ -2005,6 +2005,19 @@
       white-space: normal;
     }
 
+    .easter-command-row {
+      display: block;
+      white-space: normal;
+    }
+
+    .easter-command-row + .easter-command-row {
+      display: none;
+    }
+
+    .easter-command-row.is-active {
+      display: block;
+    }
+
     .easter-command-line[data-command-step="2"],
     .easter-command-line[data-command-step="3"],
     .easter-command-line[data-command-step="4"],
@@ -2017,6 +2030,7 @@
     }
 
     .easter-command-text {
+      min-width: 0;
       white-space: pre-wrap;
     }
 
@@ -2413,7 +2427,9 @@
 
         <div class="easter-terminal-body">
           <div class="easter-term-line easter-command-line" data-command-step="1">
-            <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git status"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            <div class="easter-command-row is-active">
+              <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git status"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="easter-term-line easter-output-line" data-step="1">On branch with-you</div>
           <div class="easter-term-line easter-output-line" data-step="1">Untracked files:</div>
@@ -2421,20 +2437,31 @@
           <div class="easter-term-line easter-output-line" data-step="1">        <span class="easter-term-success">dinner</span></div>
           <div class="easter-term-line easter-output-line" data-step="1">&nbsp;</div>
           <div class="easter-term-line easter-command-line" data-command-step="2">
-            <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git add dinner"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            <div class="easter-command-row is-active">
+              <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git add dinner"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="easter-term-line easter-output-line" data-step="2"><span class="easter-cursor" aria-hidden="true"></span></div>
           <div class="easter-term-line easter-command-line" data-command-step="3">
-            <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=' git commit -m "forever"'></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            <div class="easter-command-row is-active">
+              <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=' git commit -m "forever"'></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="easter-term-line easter-output-line" data-step="3">[with-you 0923] <span class="easter-term-branch">forever</span></div>
           <div class="easter-term-line easter-output-line" data-step="3"> 1 file changed, 1 insertion(+)</div>
           <div class="easter-term-line easter-command-line" data-command-step="4">
-            <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git checkout main"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            <div class="easter-command-row is-active">
+              <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git checkout main"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="easter-term-line easter-output-line" data-step="4">Switched to branch 'main'</div>
           <div class="easter-term-line easter-command-line" data-command-step="5">
-            <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git merge with-you --no-commit"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            <div class="easter-command-row is-active">
+              <span class="easter-shell-prompt">you@surprise:~$</span><span class="easter-command-text" data-command-text=" git merge with-you"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            </div>
+            <div class="easter-command-row">
+              <span class="easter-shell-prompt">&gt;</span><span class="easter-command-text" data-command-text=" --no-commit"></span><span class="easter-command-cursor" aria-hidden="true"></span>
+            </div>
           </div>
         </div>
 
@@ -2576,7 +2603,15 @@
         easterRunStep = 0;
         easterTerminalLines.forEach((line) => line.classList.remove("is-visible", "is-typed"));
         easterCommandLines.forEach((line) => {
-          line.querySelector(".easter-command-text").textContent = "";
+          line.querySelectorAll(".easter-command-text").forEach((node) => {
+            node.textContent = "";
+          });
+          line.querySelectorAll(".easter-command-row").forEach((row, index) => {
+            row.classList.toggle("is-active", index === 0);
+          });
+          line.querySelectorAll(".easter-command-cursor").forEach((cursor, index) => {
+            cursor.hidden = index !== 0;
+          });
         });
         easterTerminalOverlay
           .querySelector(".easter-terminal-window")
@@ -2608,9 +2643,16 @@
         );
         if (!line) return;
 
-        const textNode = line.querySelector(".easter-command-text");
-        const fullText = textNode.dataset.commandText;
-        textNode.textContent = "";
+        const textNodes = [...line.querySelectorAll(".easter-command-text")];
+        const rows = [...line.querySelectorAll(".easter-command-row")];
+        const cursors = [...line.querySelectorAll(".easter-command-cursor")];
+        textNodes.forEach((node) => {
+          node.textContent = "";
+        });
+        rows.forEach((row, index) => row.classList.toggle("is-active", index === 0));
+        cursors.forEach((cursor, index) => {
+          cursor.hidden = index !== 0;
+        });
         line.classList.add("is-visible");
         line.classList.remove("is-typed");
         easterTerminalReplay.disabled = true;
@@ -2618,27 +2660,53 @@
         easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
 
         easterTypingTimer = window.setTimeout(
-          () => typeEasterCommand(step, line, textNode, fullText),
+          () => typeEasterCommand(step, line, textNodes, rows, cursors),
           reducedMotion ? 0 : 900
         );
       }
 
-      function typeEasterCommand(step, line, textNode, fullText) {
+      function typeEasterCommand(step, line, textNodes, rows, cursors) {
         easterTerminalReplay.disabled = true;
         easterTerminalReplay.textContent = "TYPING";
 
+        const segments = textNodes.map((node) => node.dataset.commandText);
+        const segmentStarts = [];
+        let fullText = "";
+        segments.forEach((segment) => {
+          segmentStarts.push(fullText.length);
+          fullText += segment;
+        });
+
         if (reducedMotion) {
-          textNode.textContent = fullText;
+          textNodes.forEach((node, index) => {
+            node.textContent = segments[index];
+            rows[index].classList.add("is-active");
+            cursors[index].hidden = true;
+          });
           line.classList.add("is-typed");
           enableRunButton(step);
           return;
         }
 
         let cursor = 0;
+        function renderTypedCommand() {
+          let activeIndex = 0;
+          textNodes.forEach((node, index) => {
+            const start = segmentStarts[index];
+            if (cursor >= start) activeIndex = index;
+            node.textContent = segments[index].slice(
+              0,
+              Math.max(0, Math.min(segments[index].length, cursor - start))
+            );
+            rows[index].classList.toggle("is-active", index === 0 || cursor >= start);
+            cursors[index].hidden = index !== activeIndex;
+          });
+        }
+
         function typeNextCharacter() {
           if (!easterTerminalOverlay.classList.contains("is-open")) return;
           cursor += 1;
-          textNode.textContent = fullText.slice(0, cursor);
+          renderTypedCommand();
           easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
 
           if (cursor < fullText.length) {
@@ -2649,7 +2717,8 @@
             easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
           }
         }
-        typeNextCharacter();
+        renderTypedCommand();
+        easterTypingTimer = window.setTimeout(typeNextCharacter, 24);
       }
 
       function revealEasterOutputs(step) {
