@@ -1977,6 +1977,7 @@
       text-align: left;
       overscroll-behavior: contain;
       scrollbar-width: thin;
+      transition: opacity 0.35s ease;
     }
 
     .easter-term-line {
@@ -2027,24 +2028,61 @@
       animation: easter-cursor 1s steps(2, end) infinite;
     }
 
-    .easter-term-verdict {
+    .easter-terminal-finale {
       display: none;
-      margin-top: 15px;
-      padding: 13px 14px;
-      border-top: 1px solid rgba(213, 173, 97, 0.18);
-      border-radius: 10px;
-      color: #fff8ea;
-      background: rgba(213, 173, 97, 0.07);
-      font-family: var(--font);
-      font-size: 13px;
-      font-weight: 620;
-      line-height: 1.75;
+      min-height: 310px;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 34px 28px 40px;
       text-align: center;
     }
 
-    .easter-terminal-window.is-complete .easter-term-verdict {
-      display: block;
-      animation: easter-line-in 0.35s ease both;
+    .easter-terminal-window.is-clearing .easter-terminal-body,
+    .easter-terminal-window.is-clearing .easter-terminal-foot {
+      opacity: 0;
+    }
+
+    .easter-terminal-window.is-finale .easter-terminal-body,
+    .easter-terminal-window.is-finale .easter-terminal-foot {
+      display: none;
+    }
+
+    .easter-terminal-window.is-finale .easter-terminal-finale {
+      display: flex;
+    }
+
+    .easter-finale-copy {
+      max-width: 270px;
+      margin: 0;
+      color: #fff8ea;
+      font-family: Georgia, "Times New Roman", var(--font);
+      font-size: 21px;
+      font-weight: 500;
+      line-height: 1.55;
+      letter-spacing: -0.015em;
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .easter-finale-status {
+      margin: 25px 0 0;
+      color: #f0d99b;
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .easter-terminal-window.is-finale .easter-finale-copy {
+      animation: finale-copy-in 0.9s 0.2s ease forwards;
+    }
+
+    .easter-terminal-window.is-finale .easter-finale-status {
+      animation: finale-copy-in 0.7s 1.1s ease forwards;
     }
 
     .easter-terminal-foot {
@@ -2113,6 +2151,13 @@
     @keyframes easter-cursor {
       50% {
         opacity: 0;
+      }
+    }
+
+    @keyframes finale-copy-in {
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
@@ -2320,31 +2365,24 @@
             <span class="easter-term-prompt">$</span><span class="easter-cursor" aria-hidden="true"></span>
           </div>
           <div class="easter-term-line" data-step="1"><span class="easter-term-prompt">$</span> git status</div>
-          <div class="easter-term-line" data-step="1">On branch <span class="easter-term-branch">with-you</span></div>
+          <div class="easter-term-line" data-step="1">On branch with-you</div>
           <div class="easter-term-line" data-step="1">Untracked files:</div>
           <div class="easter-term-line" data-step="1">  (use "git add &lt;file&gt;..." to include in what will be committed)</div>
           <div class="easter-term-line" data-step="1">        <span class="easter-term-success">dinner</span></div>
           <div class="easter-term-line" data-step="1">&nbsp;</div>
           <div class="easter-term-line" data-step="2"><span class="easter-term-prompt">$</span> git add dinner</div>
+          <div class="easter-term-line" data-step="2"><span class="easter-cursor" aria-hidden="true"></span></div>
           <div class="easter-term-line" data-step="3"><span class="easter-term-prompt">$</span> git commit -m "forever"</div>
           <div class="easter-term-line" data-step="3">[with-you 0923] <span class="easter-term-branch">forever</span></div>
           <div class="easter-term-line" data-step="3"> 1 file changed, 1 insertion(+)</div>
-          <div class="easter-term-line" data-step="3">&nbsp;</div>
           <div class="easter-term-line" data-step="4"><span class="easter-term-prompt">$</span> git checkout main</div>
           <div class="easter-term-line" data-step="4">Switched to branch 'main'</div>
-          <div class="easter-term-line" data-step="4">&nbsp;</div>
-          <div class="easter-term-line" data-step="5"><span class="easter-term-prompt">$</span> git merge with-you</div>
-          <div class="easter-term-line" data-step="5">Updating a1b2c3d..0923e4f</div>
-          <div class="easter-term-line" data-step="5">Fast-forward</div>
-          <div class="easter-term-line" data-step="5"> dinner | 1 +</div>
-          <div class="easter-term-line" data-step="5"> 1 file changed, 1 insertion(+)</div>
-          <div class="easter-term-line" data-step="5">&nbsp;</div>
-          <div class="easter-term-line" data-step="5">[main 0923] <span class="easter-term-branch">forever</span></div>
-          <div class="easter-term-verdict">
-            待你决定<br>
-            未完待续<br>
-            等你有空
-          </div>
+          <div class="easter-term-line" data-step="5"><span class="easter-term-prompt">$</span> git merge with-you --no-commit</div>
+        </div>
+
+        <div class="easter-terminal-finale" aria-live="polite">
+          <p class="easter-finale-copy">Automatic merge went well; stopped before committing as requested.</p>
+          <p class="easter-finale-status">Awaiting your confirmation</p>
         </div>
 
         <footer class="easter-terminal-foot">
@@ -2479,8 +2517,9 @@
         easterTerminalReady.classList.remove("is-hidden");
         easterTerminalOverlay
           .querySelector(".easter-terminal-window")
-          .classList.remove("is-complete", "is-running");
+          .classList.remove("is-clearing", "is-finale", "is-running");
         easterTerminalBody.scrollTop = 0;
+        easterTerminalReplay.hidden = false;
         easterTerminalReplay.disabled = false;
         easterTerminalReplay.textContent = "RUN";
         easterTerminalReplay.setAttribute("aria-label", "运行下一步");
@@ -2494,17 +2533,20 @@
         easterTerminalReplay.disabled = false;
         easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
 
-        if (nextStep >= 5) {
-          terminalWindow.classList.add("is-complete");
-          easterTerminalReplay.textContent = "RUN AGAIN";
-          easterTerminalReplay.setAttribute("aria-label", "重新运行隐藏终端");
-          haptic([18, 30, 45]);
-          requestAnimationFrame(() => {
-            easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
-          });
-          window.setTimeout(() => {
-            easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
-          }, 90);
+        if (nextStep === 5) {
+          easterTerminalReplay.hidden = true;
+          easterTerminalReplay.disabled = true;
+          easterLineTimers.push(
+            window.setTimeout(() => {
+              terminalWindow.classList.add("is-clearing");
+              easterLineTimers.push(
+                window.setTimeout(() => {
+                  terminalWindow.classList.add("is-finale");
+                  haptic([18, 30, 45]);
+                }, 380)
+              );
+            }, 1000)
+          );
         } else {
           easterTerminalReplay.textContent = "RUN";
           haptic(8);
@@ -2522,10 +2564,6 @@
         const terminalWindow = easterTerminalOverlay.querySelector(
           ".easter-terminal-window"
         );
-        if (terminalWindow.classList.contains("is-complete")) {
-          resetTerminalView();
-        }
-
         const nextStep = easterRunStep + 1;
         const stepLines = easterTerminalLines.filter(
           (line) => Number(line.dataset.step) === nextStep
