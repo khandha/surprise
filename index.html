@@ -2594,7 +2594,7 @@
         easterTerminalReplay.setAttribute("aria-label", `运行第 ${step} 步`);
       }
 
-      function typeEasterCommand(step) {
+      function showEasterCommandPrompt(step) {
         window.clearTimeout(easterTypingTimer);
         easterRunStep = step;
         if (step > 2) {
@@ -2614,8 +2614,18 @@
         line.classList.add("is-visible");
         line.classList.remove("is-typed");
         easterTerminalReplay.disabled = true;
-        easterTerminalReplay.textContent = "TYPING";
+        easterTerminalReplay.textContent = "WAITING";
         easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
+
+        easterTypingTimer = window.setTimeout(
+          () => typeEasterCommand(step, line, textNode, fullText),
+          reducedMotion ? 0 : 900
+        );
+      }
+
+      function typeEasterCommand(step, line, textNode, fullText) {
+        easterTerminalReplay.disabled = true;
+        easterTerminalReplay.textContent = "TYPING";
 
         if (reducedMotion) {
           textNode.textContent = fullText;
@@ -2667,7 +2677,7 @@
             easterTerminalBody.scrollTop = easterTerminalBody.scrollHeight;
             if (step < 5) {
               easterLineTimers.push(
-                window.setTimeout(() => typeEasterCommand(step + 1), 500)
+                window.setTimeout(() => showEasterCommandPrompt(step + 1), 500)
               );
             }
           }, outputDuration)
@@ -2719,7 +2729,7 @@
         haptic([22, 35, 55]);
         resetTerminalView();
         window.setTimeout(
-          () => typeEasterCommand(1),
+          () => showEasterCommandPrompt(1),
           reducedMotion ? 0 : 220
         );
         window.setTimeout(
